@@ -1,10 +1,11 @@
 package br.com.fiap.foodtech.foodtech.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Endereco {
     private Long id;
     private String logradouro;

@@ -1,26 +1,21 @@
 package br.com.fiap.foodtech.foodtech.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Getter
-@Setter
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public abstract class Usuario {
-    protected String nome;
-    protected String email;
-    protected String login;
-    protected String senha;
-    protected LocalDate dataAtualizacao;
-    protected Endereco endereco;
-
-    public Usuario(String nome, String email, String senha, String login, Endereco endereco) {
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.login = login;
-        this.endereco = endereco;
-    }
+    private String nome;
+    private String email;
+    private String login;
+    private String senha;
+    private LocalDateTime dataUltimaAlteracao;
+    private Endereco endereco;
 }
 

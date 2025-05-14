@@ -1,0 +1,7 @@
+/home/deckard/workspace/fiap/foodtech/src/main/java/br/com/fiap/foodtech/foodtech/FoodtechApplication.java
+/home/deckard/workspace/fiap/foodtech/src/main/java/br/com/fiap/foodtech/foodtech/entities/Cliente.java
+/home/deckard/workspace/fiap/foodtech/src/main/java/br/com/fiap/foodtech/foodtech/entities/Endereco.java
+/home/deckard/workspace/fiap/foodtech/src/main/java/br/com/fiap/foodtech/foodtech/entities/Gestor.java
+/home/deckard/workspace/fiap/foodtech/src/main/java/br/com/fiap/foodtech/foodtech/entities/Usuario.java
+/home/deckard/workspace/fiap/foodtech/src/main/java/br/com/fiap/foodtech/foodtech/repositories/ClienteRepository.java
+/home/deckard/workspace/fiap/foodtech/src/main/java/br/com/fiap/foodtech/foodtech/service/ClienteService.java
