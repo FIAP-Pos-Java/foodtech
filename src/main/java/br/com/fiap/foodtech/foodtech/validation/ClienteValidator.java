@@ -22,7 +22,7 @@ public class ClienteValidator {
     }
 
     private boolean existeIdCliente(Long id){
-        return clienteRepository.existsById(id);
+        return clienteRepository.existsClienteById(id);
     }
 
     public void validarLoginAndEmail(Cliente cliente){
