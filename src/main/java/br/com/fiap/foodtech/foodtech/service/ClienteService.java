@@ -25,7 +25,7 @@ public class ClienteService {
 
     public Cliente salvandoCliente(Cliente cliente) {
         cliente.setDataUltimaAlteracao(LocalDateTime.now());
-        clienteValidator.validarLogin(cliente);
+        clienteValidator.validarLoginAndEmail(cliente);
         return clienteRepository.save(cliente);
     }
 

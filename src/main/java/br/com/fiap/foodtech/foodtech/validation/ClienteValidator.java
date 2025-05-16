@@ -17,13 +17,17 @@ public class ClienteValidator {
         return clienteRepository.existsClienteByLogin(login);
     }
 
+    private boolean existeClienteComEmail(String email){
+        return clienteRepository.existsClienteByEmail(email);
+    }
+
     private boolean existeIdCliente(Long id){
         return clienteRepository.existsById(id);
     }
 
-    public void validarLogin(Cliente cliente){
-        if(existeClienteComLogin(cliente.getLogin())){
-            throw new IllegalArgumentException("já existe um cliente com este login");
+    public void validarLoginAndEmail(Cliente cliente){
+        if(existeClienteComLogin(cliente.getLogin()) || existeClienteComEmail(cliente.getEmail())){
+            throw new IllegalArgumentException("esse cliente ja existe, entrar em contato com o suporte");
         }
     }
 
