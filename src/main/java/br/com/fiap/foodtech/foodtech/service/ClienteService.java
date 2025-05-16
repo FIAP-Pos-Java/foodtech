@@ -2,6 +2,7 @@ package br.com.fiap.foodtech.foodtech.service;
 
 import br.com.fiap.foodtech.foodtech.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.repositories.ClienteRepository;
+import br.com.fiap.foodtech.foodtech.validation.ClienteValidator;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,9 +12,11 @@ import java.util.List;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final ClienteValidator clienteValidator;
 
-    public ClienteService(ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository, ClienteValidator clienteValidator) {
         this.clienteRepository = clienteRepository;
+        this.clienteValidator = clienteValidator;
     }
 
     public List<Cliente> buscarCliente() {
@@ -22,10 +25,12 @@ public class ClienteService {
 
     public Cliente salvandoCliente(Cliente cliente) {
         cliente.setDataUltimaAlteracao(LocalDateTime.now());
+        clienteValidator.validarLogin(cliente);
         return clienteRepository.save(cliente);
     }
 
     public void atualizarCliente(Long id, Cliente cliente) {
+        this.clienteValidator.validarId(id);
         this.clienteRepository.findById(id).map(cli -> {
             cli.setNome(cli.getNome());
             cli.setEmail(cliente.getEmail());
@@ -44,6 +49,7 @@ public class ClienteService {
     }
 
     public void deletandoCliente(Long id) {
+        this.clienteValidator.validarId(id);
         this.clienteRepository.deleteById(id);
     }
 }

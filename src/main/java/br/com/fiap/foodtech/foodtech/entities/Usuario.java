@@ -24,7 +24,7 @@ public abstract class Usuario {
     private String login;
     private String senha;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataUltimaAlteracao;
 
     @OneToOne(cascade = CascadeType.ALL)
