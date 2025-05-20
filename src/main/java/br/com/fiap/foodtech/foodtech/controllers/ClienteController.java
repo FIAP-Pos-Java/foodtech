@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import br.com.fiap.foodtech.foodtech.dto.LoginDTO;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +32,7 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<Map<String, String>> salvandoCliente(@RequestBody Cliente cliente) {
-        try{
+        try {
             logger.info("POST -> /clientes/");
             this.clienteService.salvandoCliente(cliente);
             return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("message", "cliente salvo com sucesso"));
@@ -42,23 +43,33 @@ public class ClienteController {
 
     @PutMapping("{id}")
     public ResponseEntity<Map<String, String>> atualizaCliente(@PathVariable("id") Long id, @RequestBody Cliente cliente) {
-        try{
-            logger.info("PUT -> /clientes/"+id);
+        try {
+            logger.info("PUT -> /clientes/" + id);
             this.clienteService.atualizarCliente(id, cliente);
             return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("message", "Cliente atualizado com sucesso"));
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", e.getMessage()));
         }
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Map<String, String>> deleteCliente(@PathVariable("id") Long id) {
-       try{
-           logger.info("DELETE -> /clientes/"+id);
-           this.clienteService.deletandoCliente(id);
-           return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("message", "cliente deletado com sucesso"));
-       }catch (IllegalArgumentException e) {
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", e.getMessage()));
-       }
+        try {
+            logger.info("DELETE -> /clientes/" + id);
+            this.clienteService.deletandoCliente(id);
+            return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("message", "cliente deletado com sucesso"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+        try {
+            Cliente cliente = clienteService.validarLogin(loginDTO.getLogin(), loginDTO.getSenha());
+            return ResponseEntity.ok(Collections.singletonMap("message", "Login realizado com sucesso"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", e.getMessage()));
+        }
     }
 }

@@ -52,4 +52,15 @@ public class ClienteService {
         this.clienteValidator.validarId(id);
         this.clienteRepository.deleteById(id);
     }
+
+    public Cliente validarLogin(String login, String senha) {
+        Cliente cliente = clienteRepository.findByLogin(login);
+        if (cliente == null) {
+            throw new IllegalArgumentException("Login inválido");
+        }
+        if (!cliente.getSenha().equals(senha)) {
+            throw new IllegalArgumentException("Senha inválida");
+        }
+        return cliente;
+    }
 }
