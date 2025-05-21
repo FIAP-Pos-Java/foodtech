@@ -5,6 +5,9 @@ import br.com.fiap.foodtech.foodtech.repositories.ClienteRepository;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
 import br.com.fiap.foodtech.foodtech.service.exceptions.UnauthorizedException;
 import br.com.fiap.foodtech.foodtech.validation.ClienteValidator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,8 +24,9 @@ public class ClienteService {
         this.clienteValidator = clienteValidator;
     }
 
-    public List<Cliente> findAllClientes() {
-        return this.clienteRepository.findAll();
+    public Page<Cliente> findAllClientes(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return this.clienteRepository.findAll(pageable);
     }
 
     public Cliente findCliente(Long id) {

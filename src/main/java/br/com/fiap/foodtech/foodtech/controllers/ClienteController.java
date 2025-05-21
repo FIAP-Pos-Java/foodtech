@@ -4,6 +4,7 @@ import br.com.fiap.foodtech.foodtech.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.service.ClienteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +26,14 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<Cliente> findAllClientes() {
+    public ResponseEntity<List<Cliente>> findAllClientes(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size
+    ) {
         logger.info("GET /clientes");
-        return this.clienteService.findAllClientes();
+//        clienteService.findAllClientes(page, size);
+        var clientes = this.clienteService.findAllClientes(page, size);
+        return new ResponseEntity<>(clientes.getContent(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
