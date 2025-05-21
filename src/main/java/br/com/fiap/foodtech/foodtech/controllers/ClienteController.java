@@ -2,6 +2,7 @@ package br.com.fiap.foodtech.foodtech.controllers;
 
 import br.com.fiap.foodtech.foodtech.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.service.ClienteService;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,66 +11,57 @@ import br.com.fiap.foodtech.foodtech.dto.LoginDTO;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("clientes")
+@RequestMapping(value = "/clientes")
 public class ClienteController {
 
     private final ClienteService clienteService;
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ClienteController.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
 
     public ClienteController(ClienteService clienteService) {
         this.clienteService = clienteService;
     }
 
     @GetMapping
-    public List<Cliente> buscarCliente() {
-        logger.info("GET -> /clientes/");
-        return this.clienteService.buscarCliente();
+    public List<Cliente> findAllClientes() {
+        logger.info("GET /clientes");
+        return this.clienteService.findAllClientes();
+    }
+
+    @GetMapping("/{id}")
+    public Cliente findCliente(@PathVariable("id") Long id) {
+        logger.info("GET /cliente/" + id);
+        return this.clienteService.findCliente(id);
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> salvandoCliente(@RequestBody Cliente cliente) {
-        try {
-            logger.info("POST -> /clientes/");
-            this.clienteService.salvandoCliente(cliente);
-            return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("message", "cliente salvo com sucesso"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", e.getMessage()));
-        }
+    public ResponseEntity<Void> saveCliente(@RequestBody Cliente cliente) {
+        logger.info("POST /clientes");
+        this.clienteService.saveCliente(cliente);
+        return ResponseEntity.status(201).build();
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<Map<String, String>> atualizaCliente(@PathVariable("id") Long id, @RequestBody Cliente cliente) {
-        try {
-            logger.info("PUT -> /clientes/" + id);
-            this.clienteService.atualizarCliente(id, cliente);
-            return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("message", "Cliente atualizado com sucesso"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", e.getMessage()));
-        }
+    @PutMapping("/{id}")
+    public ResponseEntity<Cliente> updateCliente(@PathVariable("id") Long id, @RequestBody Cliente cliente) {
+        logger.info("PUT /clientes/" + id);
+        Cliente clienteAtualizado = this.clienteService.updateCliente(id, cliente);
+        return ResponseEntity.ok().body(clienteAtualizado);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Map<String, String>> deleteCliente(@PathVariable("id") Long id) {
-        try {
-            logger.info("DELETE -> /clientes/" + id);
-            this.clienteService.deletandoCliente(id);
-            return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("message", "cliente deletado com sucesso"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("message", e.getMessage()));
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCliente(@PathVariable("id") Long id) {
+        logger.info("DELETE /clientes/" + id);
+        this.clienteService.deleteCliente(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-        try {
-            Cliente cliente = clienteService.validarLogin(loginDTO.getLogin(), loginDTO.getSenha());
-            return ResponseEntity.ok(Collections.singletonMap("message", "Login realizado com sucesso"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", e.getMessage()));
-        }
+        logger.info("POST /clientes/login");
+        Cliente cliente = this.clienteService.validarLogin(loginDTO.getLogin(), loginDTO.getSenha());
+        return ResponseEntity.status(200).body("Login realizado com sucesso");
     }
+
 }

@@ -9,9 +9,7 @@ import java.time.LocalDateTime;
 
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Usuario {
@@ -27,8 +25,19 @@ public abstract class Usuario {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataUltimaAlteracao;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "id_endereco", referencedColumnName = "id")
     private Endereco endereco;
-}
 
+    public Usuario() {
+    }
+
+    public Usuario(String nome, String email, String login, String senha) {
+        this.nome = nome;
+        this.email = email;
+        this.login = login;
+        this.senha = senha;
+        this.dataUltimaAlteracao = LocalDateTime.now();
+    }
+
+}

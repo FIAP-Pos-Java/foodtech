@@ -1,0 +1,17 @@
+# Diretórios de build
+/target/
+/bin/
+/build/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+# Maven
+.mvn/
+!**/src/main/**/.mvn/wrapper/maven-wrapper.jar
+
+# Outros arquivos comuns
+*.class
