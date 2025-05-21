@@ -2,6 +2,8 @@ package br.com.fiap.foodtech.foodtech.service;
 
 import br.com.fiap.foodtech.foodtech.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.repositories.ClienteRepository;
+import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
+import br.com.fiap.foodtech.foodtech.service.exceptions.UnauthorizedException;
 import br.com.fiap.foodtech.foodtech.validation.ClienteValidator;
 import org.springframework.stereotype.Service;
 
@@ -19,47 +21,50 @@ public class ClienteService {
         this.clienteValidator = clienteValidator;
     }
 
-    public List<Cliente> buscarCliente() {
+    public List<Cliente> findAllClientes() {
         return this.clienteRepository.findAll();
     }
 
-    public Cliente salvandoCliente(Cliente cliente) {
-        cliente.setDataUltimaAlteracao(LocalDateTime.now());
-        clienteValidator.validarLoginAndEmail(cliente);
-        return clienteRepository.save(cliente);
+    public Cliente findCliente(Long id) {
+        return this.clienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado. ID: " + id));
     }
 
-    public void atualizarCliente(Long id, Cliente cliente) {
-        this.clienteValidator.validarId(id);
-        this.clienteRepository.findById(id).map(cli -> {
-            cli.setNome(cli.getNome());
-            cli.setEmail(cliente.getEmail());
-            cli.setLogin(cliente.getLogin());
-            cli.setSenha(cliente.getSenha());
-            cli.setDataUltimaAlteracao(LocalDateTime.now());
-            cli.getEndereco().setLogradouro(cliente.getEndereco().getLogradouro());
-            cli.getEndereco().setNumero(cliente.getEndereco().getNumero());
-            cli.getEndereco().setComplemento(cliente.getEndereco().getComplemento());
-            cli.getEndereco().setBairro(cliente.getEndereco().getBairro());
-            cli.getEndereco().setCidade(cliente.getEndereco().getCidade());
-            cli.getEndereco().setEstado(cliente.getEndereco().getEstado());
-            cli.getEndereco().setCep(cliente.getEndereco().getCep());
-            return clienteRepository.save(cli);
-        }).orElse(null);
+    public void saveCliente(Cliente cliente) {
+        this.clienteValidator.validarLoginAndEmail(cliente);
+        Cliente novoCliente = new Cliente(
+                cliente.getNome(),
+                cliente.getEmail(),
+                cliente.getLogin(),
+                cliente.getSenha()
+        );
+        this.clienteRepository.save(novoCliente);
     }
 
-    public void deletandoCliente(Long id) {
-        this.clienteValidator.validarId(id);
+    public Cliente updateCliente(Long id, Cliente cliente) {
+        Cliente clienteExistente = this.clienteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado. ID: " + id));
+
+        clienteExistente.setNome(cliente.getNome());
+        clienteExistente.setEmail(cliente.getEmail());
+        clienteExistente.setEndereco(cliente.getEndereco());
+        clienteExistente.setDataUltimaAlteracao(LocalDateTime.now());
+
+        return this.clienteRepository.save(clienteExistente);
+    }
+
+    public void deleteCliente(Long id) {
+        this.clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado. ID: " + id));
         this.clienteRepository.deleteById(id);
     }
 
     public Cliente validarLogin(String login, String senha) {
         Cliente cliente = clienteRepository.findByLogin(login);
         if (cliente == null) {
-            throw new IllegalArgumentException("Login inválido");
+            throw new UnauthorizedException("Login inválido.");
         }
         if (!cliente.getSenha().equals(senha)) {
-            throw new IllegalArgumentException("Senha inválida");
+            throw new UnauthorizedException("Senha inválida.");
         }
         return cliente;
     }
