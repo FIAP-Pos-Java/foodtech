@@ -17,15 +17,24 @@ public abstract class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "nome")
     private String nome;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "login")
     private String login;
+
+    @Column(name = "senha")
     private String senha;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    @Column(name = "data_ultima_alteracao")
     private LocalDateTime dataUltimaAlteracao;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco", referencedColumnName = "id")
     private Endereco endereco;
 
@@ -37,7 +46,6 @@ public abstract class Usuario {
         this.email = email;
         this.login = login;
         this.senha = senha;
-        this.dataUltimaAlteracao = LocalDateTime.now();
     }
 
 }

@@ -1,6 +1,9 @@
 package br.com.fiap.foodtech.foodtech.service;
 
+import br.com.fiap.foodtech.foodtech.dtos.AtualizarClienteDTO;
 import br.com.fiap.foodtech.foodtech.entities.Cliente;
+import br.com.fiap.foodtech.foodtech.entities.Endereco;
+import br.com.fiap.foodtech.foodtech.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.repositories.ClienteRepository;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
 import br.com.fiap.foodtech.foodtech.service.exceptions.UnauthorizedException;
@@ -11,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class ClienteService {
@@ -36,25 +38,24 @@ public class ClienteService {
 
     public void saveCliente(Cliente cliente) {
         this.clienteValidator.validarLoginAndEmail(cliente);
-        Cliente novoCliente = new Cliente(
-                cliente.getNome(),
-                cliente.getEmail(),
-                cliente.getLogin(),
-                cliente.getSenha()
-        );
-        this.clienteRepository.save(novoCliente);
+        this.clienteRepository.save(cliente);
     }
 
-    public Cliente updateCliente(Long id, Cliente cliente) {
+    public Cliente updateCliente(Long id, AtualizarClienteDTO atualizarClienteDTO) {
         Cliente clienteExistente = this.clienteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado. ID: " + id));
 
-        clienteExistente.setNome(cliente.getNome());
-        clienteExistente.setEmail(cliente.getEmail());
-        clienteExistente.setEndereco(cliente.getEndereco());
-        clienteExistente.setDataUltimaAlteracao(LocalDateTime.now());
+        Endereco enderecoExistente = clienteExistente.getEndereco();
+        if(enderecoExistente == null){
+            enderecoExistente = new Endereco();
+            clienteExistente.setEndereco(enderecoExistente);
+        }
 
-        return this.clienteRepository.save(clienteExistente);
+        Cliente clienteAtualizado = atualizarClienteDTO.mapearAtualizarCliente();
+        clienteAtualizado.setId(id);
+        clienteAtualizado.getEndereco().setId(enderecoExistente.getId());
+
+        return this.clienteRepository.save(clienteAtualizado);
     }
 
     public void deleteCliente(Long id) {

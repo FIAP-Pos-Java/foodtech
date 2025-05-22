@@ -1,16 +1,16 @@
 package br.com.fiap.foodtech.foodtech.controllers;
 
+import br.com.fiap.foodtech.foodtech.dtos.AtualizarClienteDTO;
+import br.com.fiap.foodtech.foodtech.dtos.SalvarClienteDTO;
 import br.com.fiap.foodtech.foodtech.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.service.ClienteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import br.com.fiap.foodtech.foodtech.dto.LoginDTO;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -18,8 +18,8 @@ import java.util.List;
 public class ClienteController {
 
     private final ClienteService clienteService;
-
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
+
 
     public ClienteController(ClienteService clienteService) {
         this.clienteService = clienteService;
@@ -43,17 +43,18 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveCliente(@RequestBody Cliente cliente) {
+    public ResponseEntity<Void> saveCliente(@RequestBody SalvarClienteDTO clienteDTO) {
         logger.info("POST /clientes");
+        var cliente = clienteDTO.mapearSalvarCliente();
         this.clienteService.saveCliente(cliente);
         return ResponseEntity.status(201).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> updateCliente(@PathVariable("id") Long id, @RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> updateCliente(@PathVariable("id") Long id, @RequestBody AtualizarClienteDTO atualizarClienteDTO) {
         logger.info("PUT /clientes/" + id);
-        Cliente clienteAtualizado = this.clienteService.updateCliente(id, cliente);
-        return ResponseEntity.ok().body(clienteAtualizado);
+        Cliente cliente = this.clienteService.updateCliente(id, atualizarClienteDTO);
+        return ResponseEntity.ok().body(cliente);
     }
 
     @DeleteMapping("/{id}")
