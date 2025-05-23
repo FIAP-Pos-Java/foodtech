@@ -1,7 +1,6 @@
 package br.com.fiap.foodtech.foodtech.controllers;
 
-import br.com.fiap.foodtech.foodtech.dtos.AtualizarClienteDTO;
-import br.com.fiap.foodtech.foodtech.dtos.SalvarClienteDTO;
+import br.com.fiap.foodtech.foodtech.dto.UsuarioDTO;
 import br.com.fiap.foodtech.foodtech.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.service.ClienteService;
 import org.slf4j.Logger;
@@ -31,7 +30,6 @@ public class ClienteController {
             @RequestParam("size") int size
     ) {
         logger.info("GET /clientes");
-//        clienteService.findAllClientes(page, size);
         var clientes = this.clienteService.findAllClientes(page, size);
         return new ResponseEntity<>(clientes.getContent(), HttpStatus.OK);
     }
@@ -43,18 +41,17 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveCliente(@RequestBody SalvarClienteDTO clienteDTO) {
+    public ResponseEntity<Void> saveCliente(@RequestBody UsuarioDTO usuarioDTO) {
         logger.info("POST /clientes");
-        var cliente = clienteDTO.mapearSalvarCliente();
-        this.clienteService.saveCliente(cliente);
+        this.clienteService.saveCliente(usuarioDTO);
         return ResponseEntity.status(201).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> updateCliente(@PathVariable("id") Long id, @RequestBody AtualizarClienteDTO atualizarClienteDTO) {
+    public ResponseEntity<Void> updateCliente(@PathVariable("id") Long id, @RequestBody UsuarioDTO usuarioDTO) {
         logger.info("PUT /clientes/" + id);
-        Cliente cliente = this.clienteService.updateCliente(id, atualizarClienteDTO);
-        return ResponseEntity.ok().body(cliente);
+        this.clienteService.updateCliente(id, usuarioDTO);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")

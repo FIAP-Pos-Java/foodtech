@@ -12,7 +12,10 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 public class Gestor extends Usuario {
+
     public Gestor(String nome, String email, String login, String senha) {
         super(nome, email, login, senha);
+        setDataUltimaAlteracao(LocalDateTime.now());
     }
+
 }

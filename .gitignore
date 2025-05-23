@@ -1,8 +1,3 @@
-# Diretórios de build
-/target/
-/bin/
-/build/
-
 ### IntelliJ IDEA ###
 .idea
 *.iws

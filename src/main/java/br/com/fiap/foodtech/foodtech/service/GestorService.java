@@ -1,5 +1,8 @@
 package br.com.fiap.foodtech.foodtech.service;
 
+import br.com.fiap.foodtech.foodtech.dto.UsuarioDTO;
+import br.com.fiap.foodtech.foodtech.entities.Cliente;
+import br.com.fiap.foodtech.foodtech.entities.Endereco;
 import br.com.fiap.foodtech.foodtech.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.repositories.GestorRepository;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
@@ -32,27 +35,27 @@ public class GestorService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gestor não encontrado. ID: " + id));
     }
 
-    public void saveGestor(Gestor gestor) {
-        this.gestorValidator.validarLoginAndEmail(gestor);
-        Gestor novoGestor = new Gestor(
-                gestor.getNome(),
-                gestor.getEmail(),
-                gestor.getLogin(),
-                gestor.getSenha()
-        );
+    public void saveGestor(UsuarioDTO usuarioDTO) {
+        Gestor novoGestor = usuarioDTO.mapearGestor();
+        this.gestorValidator.validarLoginAndEmail(novoGestor);
         this.gestorRepository.save(novoGestor);
     }
 
-    public Gestor updateGestor(Long id, Gestor gestor) {
+    public void updateGestor(Long id, UsuarioDTO usuarioDTO) {
         Gestor gestorExistente = this.gestorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Gestor não encontrado. ID: " + id));
 
-        gestorExistente.setNome(gestor.getNome());
-        gestorExistente.setEmail(gestor.getEmail());
-        gestorExistente.setEndereco(gestor.getEndereco());
-        gestorExistente.setDataUltimaAlteracao(LocalDateTime.now());
+        Gestor gestorAtualizado = usuarioDTO.mapearGestor();
 
-        return this.gestorRepository.save(gestorExistente);
+        Endereco enderecoExistente = gestorExistente.getEndereco();
+        if(enderecoExistente == null){
+            enderecoExistente = new Endereco();
+            gestorExistente.setEndereco(enderecoExistente);
+        }
+
+        gestorAtualizado.setId(id);
+        gestorAtualizado.getEndereco().setId(enderecoExistente.getId());
+        this.gestorRepository.save(gestorAtualizado);
     }
 
     public void deleteGestor(Long id) {

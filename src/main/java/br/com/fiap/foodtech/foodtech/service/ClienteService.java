@@ -1,9 +1,8 @@
 package br.com.fiap.foodtech.foodtech.service;
 
-import br.com.fiap.foodtech.foodtech.dtos.AtualizarClienteDTO;
+import br.com.fiap.foodtech.foodtech.dto.UsuarioDTO;
 import br.com.fiap.foodtech.foodtech.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.entities.Endereco;
-import br.com.fiap.foodtech.foodtech.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.repositories.ClienteRepository;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
 import br.com.fiap.foodtech.foodtech.service.exceptions.UnauthorizedException;
@@ -13,7 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.HashMap;
 
 @Service
 public class ClienteService {
@@ -36,14 +35,17 @@ public class ClienteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado. ID: " + id));
     }
 
-    public void saveCliente(Cliente cliente) {
-        this.clienteValidator.validarLoginAndEmail(cliente);
-        this.clienteRepository.save(cliente);
+    public void saveCliente(UsuarioDTO usuarioDTO) {
+        Cliente novoCliente = usuarioDTO.mapearCliente();
+        this.clienteValidator.validarLoginAndEmail(novoCliente);
+        this.clienteRepository.save(novoCliente);
     }
 
-    public Cliente updateCliente(Long id, AtualizarClienteDTO atualizarClienteDTO) {
+    public void updateCliente(Long id, UsuarioDTO usuarioDTO) {
         Cliente clienteExistente = this.clienteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado. ID: " + id));
+
+        Cliente clienteAtualizado = usuarioDTO.mapearCliente();
 
         Endereco enderecoExistente = clienteExistente.getEndereco();
         if(enderecoExistente == null){
@@ -51,11 +53,9 @@ public class ClienteService {
             clienteExistente.setEndereco(enderecoExistente);
         }
 
-        Cliente clienteAtualizado = atualizarClienteDTO.mapearAtualizarCliente();
         clienteAtualizado.setId(id);
         clienteAtualizado.getEndereco().setId(enderecoExistente.getId());
-
-        return this.clienteRepository.save(clienteAtualizado);
+        this.clienteRepository.save(clienteAtualizado);
     }
 
     public void deleteCliente(Long id) {

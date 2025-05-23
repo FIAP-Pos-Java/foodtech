@@ -14,7 +14,7 @@ public class Cliente extends Usuario {
 
     public Cliente(String nome, String email, String login, String senha) {
         super(nome, email, login, senha);
+        setDataUltimaAlteracao(LocalDateTime.now());
     }
-
 
 }

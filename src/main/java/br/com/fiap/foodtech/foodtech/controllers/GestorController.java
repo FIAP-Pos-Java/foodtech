@@ -1,6 +1,7 @@
 package br.com.fiap.foodtech.foodtech.controllers;
 
 import br.com.fiap.foodtech.foodtech.dto.LoginDTO;
+import br.com.fiap.foodtech.foodtech.dto.UsuarioDTO;
 import br.com.fiap.foodtech.foodtech.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.service.GestorService;
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ public class GestorController {
             @RequestParam("page") int page,
             @RequestParam("size") int size
     ) {
-        logger.info("GET /gestors");
+        logger.info("GET /gestores");
         var gestores = this.gestorService.findAllGestors(page, size);
         return new ResponseEntity<>(gestores.getContent(), HttpStatus.OK);
     }
@@ -38,29 +39,29 @@ public class GestorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveGestor(@RequestBody Gestor gestor) {
-        logger.info("POST /gestors");
-        this.gestorService.saveGestor(gestor);
+    public ResponseEntity<Void> saveGestor(@RequestBody UsuarioDTO usuarioDTO) {
+        logger.info("POST /gestores");
+        this.gestorService.saveGestor(usuarioDTO);
         return ResponseEntity.status(201).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Gestor> updateGestor(@PathVariable("id") Long id, @RequestBody Gestor gestor) {
-        logger.info("PUT /gestors/" + id);
-        Gestor gestorAtualizado = this.gestorService.updateGestor(id, gestor);
-        return ResponseEntity.ok().body(gestorAtualizado);
+    public ResponseEntity<Void> updateGestor(@PathVariable("id") Long id, @RequestBody UsuarioDTO usuarioDTO) {
+        logger.info("PUT /gestores/" + id);
+        this.gestorService.updateGestor(id, usuarioDTO);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGestor(@PathVariable("id") Long id) {
-        logger.info("DELETE /gestors/" + id);
+        logger.info("DELETE /gestores/" + id);
         this.gestorService.deleteGestor(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-        logger.info("POST /gestors/login");
+        logger.info("POST /gestores/login");
         Gestor gestor = this.gestorService.validarLogin(loginDTO.getLogin(), loginDTO.getSenha());
         return ResponseEntity.status(200).body("Login realizado com sucesso");
     }

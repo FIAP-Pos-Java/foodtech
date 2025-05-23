@@ -1,6 +1,6 @@
 package br.com.fiap.foodtech.foodtech.controllers.handlers;
 
-import br.com.fiap.foodtech.foodtech.dtos.ResourceExceptionDTO;
+import br.com.fiap.foodtech.foodtech.dto.ResourceExceptionDTO;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceAlreadyExistsException;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
 import br.com.fiap.foodtech.foodtech.service.exceptions.UnauthorizedException;
