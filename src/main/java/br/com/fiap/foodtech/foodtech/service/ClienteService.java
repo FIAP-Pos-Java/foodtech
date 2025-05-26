@@ -62,15 +62,4 @@ public class ClienteService {
         this.clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado. ID: " + id));
         this.clienteRepository.deleteById(id);
     }
-
-    public Cliente validarLogin(String login, String senha) {
-        Cliente cliente = clienteRepository.findByLogin(login);
-        if (cliente == null) {
-            throw new UnauthorizedException("Login inválido.");
-        }
-        if (!cliente.getSenha().equals(senha)) {
-            throw new UnauthorizedException("Senha inválida.");
-        }
-        return cliente;
-    }
 }

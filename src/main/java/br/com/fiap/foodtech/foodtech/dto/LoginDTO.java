@@ -1,9 +1,11 @@
 package br.com.fiap.foodtech.foodtech.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-@Data
-public class LoginDTO {
-    private String login;
-    private String senha;
+public record loginDTO(
+        @NotNull(message = "O login não pode ser nulo")
+        String login,
+        @NotNull(message = "A senha não pode ser nula")
+        String senha) {
 }

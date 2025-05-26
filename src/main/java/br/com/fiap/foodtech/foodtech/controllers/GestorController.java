@@ -1,6 +1,6 @@
 package br.com.fiap.foodtech.foodtech.controllers;
 
-import br.com.fiap.foodtech.foodtech.dto.LoginDTO;
+import br.com.fiap.foodtech.foodtech.dto.loginDTO;
 import br.com.fiap.foodtech.foodtech.dto.UsuarioDTO;
 import br.com.fiap.foodtech.foodtech.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.service.GestorService;
@@ -57,12 +57,5 @@ public class GestorController {
         logger.info("DELETE /gestores/" + id);
         this.gestorService.deleteGestor(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-        logger.info("POST /gestores/login");
-        Gestor gestor = this.gestorService.validarLogin(loginDTO.getLogin(), loginDTO.getSenha());
-        return ResponseEntity.status(200).body("Login realizado com sucesso");
     }
 }

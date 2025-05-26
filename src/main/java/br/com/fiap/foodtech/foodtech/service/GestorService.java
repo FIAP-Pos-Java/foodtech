@@ -62,16 +62,5 @@ public class GestorService {
         this.gestorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Gestor não encontrado. ID: " + id));
         this.gestorRepository.deleteById(id);
     }
-
-    public Gestor validarLogin(String login, String senha) {
-        Gestor gestor = gestorRepository.findByLogin(login);
-        if (gestor == null) {
-            throw new UnauthorizedException("Login inválido.");
-        }
-        if (!gestor.getSenha().equals(senha)) {
-            throw new UnauthorizedException("Senha inválida.");
-        }
-        return gestor;
-    }
 }
 

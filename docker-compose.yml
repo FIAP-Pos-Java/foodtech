@@ -1,0 +1,30 @@
+volumes:
+  mysql_data: {}
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: foodtech
+      MYSQL_USER: foodtech
+      MYSQL_PASSWORD: foodtech
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    image: openjdk:21-jdk
+    depends_on:
+      - mysql
+    command: ["java", "-jar", "/target/foodtech-0.0.1-SNAPSHOT.jar"]
+    volumes:
+      - ./target/foodtech-0.0.1-SNAPSHOT.jar:/app/foodtech.jar
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/foodtech
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8080:8080"
