@@ -1,7 +1,0 @@
-br/com/fiap/foodtech/foodtech/FoodtechApplication.class
-br/com/fiap/foodtech/foodtech/entities/Gestor.class
-br/com/fiap/foodtech/foodtech/entities/Usuario.class
-br/com/fiap/foodtech/foodtech/service/ClienteService.class
-br/com/fiap/foodtech/foodtech/entities/Endereco.class
-br/com/fiap/foodtech/foodtech/entities/Cliente.class
-br/com/fiap/foodtech/foodtech/repositories/ClienteRepository.class

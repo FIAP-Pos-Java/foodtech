@@ -1,6 +1,5 @@
 package br.com.fiap.foodtech.foodtech.controllers;
 
-import br.com.fiap.foodtech.foodtech.dto.loginDTO;
 import br.com.fiap.foodtech.foodtech.dto.UsuarioDTO;
 import br.com.fiap.foodtech.foodtech.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.service.GestorService;

@@ -1,6 +1,6 @@
 package br.com.fiap.foodtech.foodtech.service;
 
-import br.com.fiap.foodtech.foodtech.dto.loginDTO;
+import br.com.fiap.foodtech.foodtech.dto.LoginDTO;
 import br.com.fiap.foodtech.foodtech.dto.SenhaDTO;
 import br.com.fiap.foodtech.foodtech.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.entities.Usuario;
@@ -28,7 +28,7 @@ public class LoginClienteService implements LoginService {
     }
 
     @Override
-    public void validarLogin(loginDTO loginDTO) {
+    public void validarLogin(LoginDTO loginDTO) {
         boolean existelogin = clienteRepository.existsClienteByLogin(loginDTO.login());
         if (!existelogin) {
             throw new ResourceNotFoundException ("Cliente não encontrado");

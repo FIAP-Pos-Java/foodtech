@@ -1,6 +1,6 @@
 package br.com.fiap.foodtech.foodtech.controllers;
 
-import br.com.fiap.foodtech.foodtech.dto.loginDTO;
+import br.com.fiap.foodtech.foodtech.dto.LoginDTO;
 import br.com.fiap.foodtech.foodtech.dto.SenhaDTO;
 import br.com.fiap.foodtech.foodtech.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.entities.Gestor;
@@ -31,7 +31,7 @@ public class LoginController {
     @PostMapping("/cliente")
     public ResponseEntity<Optional<Cliente>> validarLoginGestor(
             @Valid
-            @RequestBody loginDTO loginDTO) {
+            @RequestBody LoginDTO loginDTO) {
         logger.info("POST /cliente/login");
         loginClienteService.validarLogin(loginDTO);
         return ResponseEntity.status(201).build();
@@ -40,7 +40,7 @@ public class LoginController {
     @PostMapping("/gestor")
     public ResponseEntity<Optional<Gestor>> validarLoginCliente(
             @Valid
-            @RequestBody loginDTO loginDTO) {
+            @RequestBody LoginDTO loginDTO) {
         logger.info("POST /gestor/login");
         loginGestorService.validarLogin(loginDTO);
         return ResponseEntity.status(201).build();
