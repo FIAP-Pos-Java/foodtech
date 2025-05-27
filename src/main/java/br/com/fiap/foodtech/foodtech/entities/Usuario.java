@@ -7,13 +7,14 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
+@MappedSuperclass
 public abstract class Usuario {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,9 +38,6 @@ public abstract class Usuario {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco", referencedColumnName = "id")
     private Endereco endereco;
-
-    public Usuario() {
-    }
 
     public Usuario(String nome, String email, String login, String senha) {
         this.nome = nome;
