@@ -6,24 +6,21 @@ import br.com.fiap.foodtech.foodtech.entities.Endereco;
 import br.com.fiap.foodtech.foodtech.entities.Login;
 import br.com.fiap.foodtech.foodtech.repositories.ClienteRepository;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
-import br.com.fiap.foodtech.foodtech.service.exceptions.UnauthorizedException;
-import br.com.fiap.foodtech.foodtech.validation.ClienteValidator;
+import br.com.fiap.foodtech.foodtech.validation.UsuarioValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-
 @Service
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
-    private final ClienteValidator clienteValidator;
+    private final UsuarioValidator usuarioValidator;
 
-    public ClienteService(ClienteRepository clienteRepository, ClienteValidator clienteValidator) {
+    public ClienteService(ClienteRepository clienteRepository, UsuarioValidator usuarioValidator) {
         this.clienteRepository = clienteRepository;
-        this.clienteValidator = clienteValidator;
+        this.usuarioValidator = usuarioValidator;
     }
 
     public Page<Cliente> findAllClientes(int page, int size) {
@@ -38,7 +35,7 @@ public class ClienteService {
 
     public void saveCliente(UsuarioDTO usuarioDTO) {
         Cliente novoCliente = usuarioDTO.mapearCliente();
-//        this.clienteValidator.validarEmail(novoCliente);
+        this.usuarioValidator.validarEmail(novoCliente);
         this.clienteRepository.save(novoCliente);
     }
 
