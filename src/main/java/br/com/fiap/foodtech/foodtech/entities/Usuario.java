@@ -22,7 +22,7 @@ public abstract class Usuario {
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
