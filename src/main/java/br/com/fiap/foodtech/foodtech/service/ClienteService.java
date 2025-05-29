@@ -3,6 +3,7 @@ package br.com.fiap.foodtech.foodtech.service;
 import br.com.fiap.foodtech.foodtech.dto.UsuarioDTO;
 import br.com.fiap.foodtech.foodtech.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.entities.Endereco;
+import br.com.fiap.foodtech.foodtech.entities.Login;
 import br.com.fiap.foodtech.foodtech.repositories.ClienteRepository;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
 import br.com.fiap.foodtech.foodtech.service.exceptions.UnauthorizedException;
@@ -37,7 +38,7 @@ public class ClienteService {
 
     public void saveCliente(UsuarioDTO usuarioDTO) {
         Cliente novoCliente = usuarioDTO.mapearCliente();
-        this.clienteValidator.validarLoginAndEmail(novoCliente);
+//        this.clienteValidator.validarEmail(novoCliente);
         this.clienteRepository.save(novoCliente);
     }
 
@@ -46,6 +47,13 @@ public class ClienteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado. ID: " + id));
 
         Cliente clienteAtualizado = usuarioDTO.mapearCliente();
+        Login loginAtualizado = usuarioDTO.mapearCliente().getLogin();
+
+        Login loginExistente = clienteExistente.getLogin();
+        if(loginExistente == null){
+            loginExistente = new Login();
+            loginExistente.setLogin(loginAtualizado.getLogin());
+        }
 
         Endereco enderecoExistente = clienteExistente.getEndereco();
         if(enderecoExistente == null){
@@ -54,6 +62,7 @@ public class ClienteService {
         }
 
         clienteAtualizado.setId(id);
+        clienteAtualizado.getLogin().setId(loginExistente.getId());
         clienteAtualizado.getEndereco().setId(enderecoExistente.getId());
         this.clienteRepository.save(clienteAtualizado);
     }

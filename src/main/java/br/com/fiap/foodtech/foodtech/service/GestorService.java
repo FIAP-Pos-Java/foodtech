@@ -4,6 +4,7 @@ import br.com.fiap.foodtech.foodtech.dto.UsuarioDTO;
 import br.com.fiap.foodtech.foodtech.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.entities.Endereco;
 import br.com.fiap.foodtech.foodtech.entities.Gestor;
+import br.com.fiap.foodtech.foodtech.entities.Login;
 import br.com.fiap.foodtech.foodtech.repositories.GestorRepository;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
 import br.com.fiap.foodtech.foodtech.service.exceptions.UnauthorizedException;
@@ -37,7 +38,7 @@ public class GestorService {
 
     public void saveGestor(UsuarioDTO usuarioDTO) {
         Gestor novoGestor = usuarioDTO.mapearGestor();
-        this.gestorValidator.validarLoginAndEmail(novoGestor);
+//        this.gestorValidator.validarEmail(novoGestor);
         this.gestorRepository.save(novoGestor);
     }
 
@@ -46,6 +47,13 @@ public class GestorService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gestor não encontrado. ID: " + id));
 
         Gestor gestorAtualizado = usuarioDTO.mapearGestor();
+        Login loginAtualizado = usuarioDTO.mapearGestor().getLogin();
+
+        Login loginExistente = gestorExistente.getLogin();
+        if(loginExistente == null){
+            loginExistente = new Login();
+            loginExistente.setLogin(loginAtualizado.getLogin());
+        }
 
         Endereco enderecoExistente = gestorExistente.getEndereco();
         if(enderecoExistente == null){
@@ -54,6 +62,7 @@ public class GestorService {
         }
 
         gestorAtualizado.setId(id);
+        gestorAtualizado.getLogin().setId(loginExistente.getId());
         gestorAtualizado.getEndereco().setId(enderecoExistente.getId());
         this.gestorRepository.save(gestorAtualizado);
     }

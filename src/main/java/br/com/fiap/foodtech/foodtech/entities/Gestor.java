@@ -19,8 +19,8 @@ public class Gestor extends Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Gestor(String nome, String email, String login, String senha) {
-        super(nome, email, login, senha);
+    public Gestor(String nome, String email, Login login, Endereco endereco) {
+        super(nome, email, login, endereco);
         setDataUltimaAlteracao(LocalDateTime.now());
     }
 
