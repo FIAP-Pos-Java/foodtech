@@ -25,25 +25,23 @@ public abstract class Usuario {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "login")
-    private String login;
-
-    @Column(name = "senha")
-    private String senha;
-
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     @Column(name = "data_ultima_alteracao")
     private LocalDateTime dataUltimaAlteracao;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_login", referencedColumnName = "id")
+    private Login login;
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco", referencedColumnName = "id")
     private Endereco endereco;
 
-    public Usuario(String nome, String email, String login, String senha) {
+    public Usuario(String nome, String email, Login login, Endereco endereco) {
         this.nome = nome;
         this.email = email;
         this.login = login;
-        this.senha = senha;
+        this.endereco = endereco;
     }
 
 }

@@ -7,11 +7,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GestorRepository extends JpaRepository<Gestor, Long> {
 
-    boolean existsGestorByLogin(String login);
-
-    boolean existsGestorByEmail(String email);
-
-    boolean existsGestorById(Long id);
-
-    Gestor findByLogin(String login);
+//    boolean existsGestorByEmail(String email);
+//
+//    boolean existsGestorById(Long id);
+//
+//    Gestor findByLogin(String login);
 }
