@@ -3,6 +3,7 @@ package br.com.fiap.foodtech.foodtech.controllers;
 import br.com.fiap.foodtech.foodtech.dto.UsuarioDTO;
 import br.com.fiap.foodtech.foodtech.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.service.GestorService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -38,14 +39,14 @@ public class GestorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveGestor(@RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Void> saveGestor(@Valid @RequestBody UsuarioDTO usuarioDTO) {
         logger.info("POST /gestores");
         this.gestorService.saveGestor(usuarioDTO);
         return ResponseEntity.status(201).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateGestor(@PathVariable("id") Long id, @RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Void> updateGestor(@PathVariable("id") Long id, @Valid @RequestBody UsuarioDTO usuarioDTO) {
         logger.info("PUT /gestores/" + id);
         this.gestorService.updateGestor(id, usuarioDTO);
         return ResponseEntity.ok().build();
