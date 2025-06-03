@@ -10,11 +10,11 @@
 
 ## Sobre o Projeto
 
-# Descrição do problema  
+### Descrição do problema  
 
 Os restaurantes da região estão lidando com altos custos por conta de sistemas de gestão individuais e enfrentam um problema nas recomendações de pratos aos clientes. Atualmente, essas recomendações são influenciadas pela qualidade do sistema usado, e não pelas preferências reais dos consumidores, o que compromete a experiência e a decisão de compra. 
 
-# Objetivo do projeto 
+### Objetivo do projeto 
 
 Desenvolver um sistema robusto que permita aos restaurantes gerenciar suas operações de forma eficiente, enquanto os clientes poderão consultar informações, avaliar estabelecimentos e fazer pedidos online.  
 
@@ -22,7 +22,7 @@ Com recursos financeiros limitados, a entrega será feita em fases, garantindo u
 
 Além disso, o sistema será focado nas preferências pessoais dos clientes, permitindo que escolham os restaurantes com base na comida que desejam, e não mais na qualidade do sistema de gestão anterior. 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">voltar ao topo</a>)</p>
 
 ## Uso
 
@@ -32,4 +32,4 @@ Use esse comando para iniciar o Docker.
 docker-compose up -d
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">voltar ao topo</a>)</p>
