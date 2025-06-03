@@ -10,11 +10,11 @@
 
 ## Sobre o Projeto
 
-Descrição do problema  
+# Descrição do problema  
 
 Os restaurantes da região estão lidando com altos custos por conta de sistemas de gestão individuais e enfrentam um problema nas recomendações de pratos aos clientes. Atualmente, essas recomendações são influenciadas pela qualidade do sistema usado, e não pelas preferências reais dos consumidores, o que compromete a experiência e a decisão de compra. 
 
-Objetivo do projeto 
+# Objetivo do projeto 
 
 Desenvolver um sistema robusto que permita aos restaurantes gerenciar suas operações de forma eficiente, enquanto os clientes poderão consultar informações, avaliar estabelecimentos e fazer pedidos online.  
 
