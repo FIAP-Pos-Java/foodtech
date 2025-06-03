@@ -31,7 +31,7 @@ Além disso, o sistema será focado nas preferências pessoais dos clientes, per
 Use esse comando para iniciar o Docker.
 
 ```sh
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 <p align="right">(<a href="#readme-top">voltar ao topo</a>)</p>
