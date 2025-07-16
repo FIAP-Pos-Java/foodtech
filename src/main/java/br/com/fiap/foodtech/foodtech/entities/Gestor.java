@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,9 +20,11 @@ public class Gestor extends Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(mappedBy = "gestor")
+    private List<Restaurante> restaurantes;
+
     public Gestor(String nome, String email, Login login, Endereco endereco) {
         super(nome, email, login, endereco);
         setDataUltimaAlteracao(LocalDateTime.now());
     }
-
 }
