@@ -40,6 +40,10 @@ public class RestauranteController {
     ) {
         logger.info("GET /restaurantes");
         var restaurantes = this.restauranteService.findAllRestaurantes(page, size);
+
+        if (restaurantes.isEmpty())
+            return ResponseEntity.noContent().build();
+
         return new ResponseEntity<>(restaurantes.getContent(), HttpStatus.OK);
     }
 
