@@ -82,7 +82,7 @@ public class RestauranteService {
     }
 
     public void updateRestaurante(Long id, RestauranteDTO restaurante) {
-        Restaurante restauranteEntity = this.restauranteRepository.findById(id)
+        var restauranteEntity = this.restauranteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurante não encontrado. ID: " + id));
 
         restauranteEntity.setNome(restaurante.nome());
@@ -95,7 +95,7 @@ public class RestauranteService {
     }
 
     public void updateRestauranteEndereco(Long id, EnderecoDTO endereco) {
-        Restaurante restaurante = this.restauranteRepository.findById(id)
+        var restaurante = this.restauranteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurante não encontrado. ID: " + id));
 
         var enderecoEntity = new Endereco(
