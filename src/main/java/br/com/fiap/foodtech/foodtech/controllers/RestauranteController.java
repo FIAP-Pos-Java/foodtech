@@ -93,21 +93,6 @@ public class RestauranteController {
     }
 
     @Operation(
-            description = "Atualizar o endereço de um restaurante",
-            summary = "Atualizar endereço do restaurante",
-            responses = {
-                    @ApiResponse(description = "Ok", responseCode = "200"),
-                    @ApiResponse(description = "Not Found", responseCode = "404")
-            }
-    )
-    @PutMapping("/{id}/endereco")
-    public ResponseEntity<Void> updateRestauranteEndereco(@PathVariable("id") Long id, @RequestBody EnderecoDTO enderecoDTO) {
-        logger.info("PUT /restaurante/" + id + "/endereco");
-        this.restauranteService.updateRestauranteEndereco(id, enderecoDTO);
-        return ResponseEntity.ok().build();
-    }
-
-    @Operation(
             description = "Excluir um restaurante por ID",
             summary = "Excluir restaurante",
             responses = {

@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 public record RestauranteDTO(
+        Long id,
+
         @NotEmpty(message = "O nome do restaurante é obrigatório")
         String nome,
 

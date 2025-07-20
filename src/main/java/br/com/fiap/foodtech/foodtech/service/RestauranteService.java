@@ -40,6 +40,7 @@ public class RestauranteService {
 
     private static RestauranteDTO mapFromRestauranteEntity(Restaurante restaurante) {
         return new RestauranteDTO(
+                restaurante.getId(),
                 restaurante.getNome(),
                 restaurante.getTipoCozinha(),
                 restaurante.getHorarioAbertura(),
@@ -61,12 +62,12 @@ public class RestauranteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Gestor não encontrado. ID: " + restaurante.idDonoRestaurante()));
 
         var endereco = new Endereco(
-                restaurante.enderecoDTO().logradouro(),
-                restaurante.enderecoDTO().numero(),
-                restaurante.enderecoDTO().bairro(),
-                restaurante.enderecoDTO().cidade(),
-                restaurante.enderecoDTO().estado(),
-                restaurante.enderecoDTO().cep()
+                restaurante.endereco().logradouro(),
+                restaurante.endereco().numero(),
+                restaurante.endereco().bairro(),
+                restaurante.endereco().cidade(),
+                restaurante.endereco().estado(),
+                restaurante.endereco().cep()
         );
 
         var restauranteEntity = new Restaurante(
@@ -91,25 +92,16 @@ public class RestauranteService {
         restauranteEntity.setHorarioFechamento(restaurante.horarioFechamento());
         restauranteEntity.setDataUltimaAlteracao(LocalDateTime.now());
 
+        restauranteEntity.setEndereco(new Endereco(
+                restaurante.endereco().logradouro(),
+                restaurante.endereco().numero(),
+                restaurante.endereco().bairro(),
+                restaurante.endereco().cidade(),
+                restaurante.endereco().estado(),
+                restaurante.endereco().cep()
+        ));
+
         this.restauranteRepository.save(restauranteEntity);
-    }
-
-    public void updateRestauranteEndereco(Long id, EnderecoDTO endereco) {
-        var restaurante = this.restauranteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Restaurante não encontrado. ID: " + id));
-
-        var enderecoEntity = new Endereco(
-                endereco.logradouro(),
-                endereco.numero(),
-                endereco.bairro(),
-                endereco.cidade(),
-                endereco.estado(),
-                endereco.cep()
-        );
-
-        restaurante.setEndereco(enderecoEntity);
-
-        this.restauranteRepository.save(restaurante);
     }
 
     public void deleteRestaurante(Long id) {
