@@ -1,6 +1,7 @@
 package br.com.fiap.foodtech.foodtech.controllers;
 
-import br.com.fiap.foodtech.foodtech.entities.Restaurante;
+import br.com.fiap.foodtech.foodtech.dto.EnderecoDTO;
+import br.com.fiap.foodtech.foodtech.dto.RestauranteDTO;
 import br.com.fiap.foodtech.foodtech.service.RestauranteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,7 +34,7 @@ public class RestauranteController {
             }
     )
     @GetMapping
-    public ResponseEntity<List<Restaurante>> findAllRestaurantes(
+    public ResponseEntity<List<RestauranteDTO>> findAllRestaurantes(
             @RequestParam("page") int page,
             @RequestParam("size") int size
     ) {
@@ -51,9 +52,10 @@ public class RestauranteController {
             }
     )
     @GetMapping("/{id}")
-    public Restaurante findRestaurante(@PathVariable("id") Long id) {
+    public ResponseEntity<RestauranteDTO> findRestaurante(@PathVariable("id") Long id) {
         logger.info("GET /restaurante/" + id);
-        return this.restauranteService.findRestaurante(id);
+        var restaurante = this.restauranteService.findRestaurante(id);
+        return ResponseEntity.ok(restaurante);
     }
 
     @Operation(
@@ -65,7 +67,7 @@ public class RestauranteController {
             }
     )
     @PostMapping
-    public ResponseEntity<Restaurante> saveRestaurante(@RequestBody Restaurante restaurante) {
+    public ResponseEntity<Void> saveRestaurante(@RequestBody RestauranteDTO restaurante) {
         logger.info("POST /restaurante");
         this.restauranteService.saveRestaurante(restaurante);
         return ResponseEntity.status(201).build();
@@ -80,9 +82,24 @@ public class RestauranteController {
             }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Restaurante> updateRestaurante(@PathVariable("id") Long id, @RequestBody Restaurante restaurante) {
+    public ResponseEntity<Void> updateRestaurante(@PathVariable("id") Long id, @RequestBody RestauranteDTO restaurante) {
         logger.info("PUT /restaurante/" + id);
         this.restauranteService.updateRestaurante(id, restaurante);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(
+            description = "Atualizar o endereço de um restaurante",
+            summary = "Atualizar endereço do restaurante",
+            responses = {
+                    @ApiResponse(description = "Ok", responseCode = "200"),
+                    @ApiResponse(description = "Not Found", responseCode = "404")
+            }
+    )
+    @PutMapping("/{id}/endereco")
+    public ResponseEntity<Void> updateRestauranteEndereco(@PathVariable("id") Long id, @RequestBody EnderecoDTO enderecoDTO) {
+        logger.info("PUT /restaurante/" + id + "/endereco");
+        this.restauranteService.updateRestauranteEndereco(id, enderecoDTO);
         return ResponseEntity.ok().build();
     }
 

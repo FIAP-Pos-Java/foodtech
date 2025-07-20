@@ -5,14 +5,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "restaurante")
 public class Restaurante {
@@ -45,4 +43,19 @@ public class Restaurante {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_endereco", referencedColumnName = "id")
     private Endereco endereco;
+
+    public Restaurante(
+            String nome,
+            String tipoCozinha,
+            LocalTime horarioAbertura,
+            LocalTime horarioFechamento,
+            Gestor gestor, Endereco endereco) {
+        this.nome = nome;
+        this.tipoCozinha = tipoCozinha;
+        this.horarioAbertura = horarioAbertura;
+        this.horarioFechamento = horarioFechamento;
+        this.gestor = gestor;
+        this.endereco = endereco;
+        this.dataUltimaAlteracao = LocalDateTime.now();
+    }
 }
