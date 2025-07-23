@@ -6,22 +6,21 @@ import br.com.fiap.foodtech.foodtech.entities.Endereco;
 import br.com.fiap.foodtech.foodtech.entities.Login;
 import br.com.fiap.foodtech.foodtech.repositories.ClienteRepository;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
+import br.com.fiap.foodtech.foodtech.validation.TipoUsuarioValidator;
 import br.com.fiap.foodtech.foodtech.validation.UsuarioValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final UsuarioValidator usuarioValidator;
-
-    public ClienteService(ClienteRepository clienteRepository, UsuarioValidator usuarioValidator) {
-        this.clienteRepository = clienteRepository;
-        this.usuarioValidator = usuarioValidator;
-    }
+    private final TipoUsuarioValidator tipoUsuarioValidator;
 
     public Page<Cliente> findAllClientes(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -35,6 +34,8 @@ public class ClienteService {
 
     public void saveCliente(UsuarioDTO usuarioDTO) {
         Cliente novoCliente = usuarioDTO.mapearCliente();
+        String tipoUsuario = this.tipoUsuarioValidator.validandoTipoUsuario(novoCliente);
+        novoCliente.setTipoUsuario(tipoUsuario);
         this.usuarioValidator.validarEmail(novoCliente);
         this.clienteRepository.save(novoCliente);
     }
@@ -59,6 +60,8 @@ public class ClienteService {
         }
 
         clienteAtualizado.setId(id);
+        String tipoUsuario = this.tipoUsuarioValidator.validandoTipoUsuario(clienteAtualizado);
+        clienteAtualizado.setTipoUsuario(tipoUsuario);
         clienteAtualizado.getLogin().setId(loginExistente.getId());
         clienteAtualizado.getEndereco().setId(enderecoExistente.getId());
         this.clienteRepository.save(clienteAtualizado);
