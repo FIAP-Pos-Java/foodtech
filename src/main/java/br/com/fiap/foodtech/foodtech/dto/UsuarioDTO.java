@@ -16,6 +16,8 @@ public record UsuarioDTO(
         @NotEmpty(message = "O email do usuário é obrigatório")
         String email,
 
+        String tipoUsuario,
+
         @Valid
         LoginDTO login,
 
@@ -23,11 +25,11 @@ public record UsuarioDTO(
         EnderecoDTO endereco) {
 
     public Cliente mapearCliente() {
-        return new Cliente(nome, email, login.mapearLogin(), endereco.mapearEndereco());
+        return new Cliente(nome, email, tipoUsuario, login.mapearLogin(), endereco.mapearEndereco());
     }
 
     public Gestor mapearGestor() {
-        return new Gestor(nome, email, login.mapearLogin(), endereco.mapearEndereco());
+        return new Gestor(nome, email, tipoUsuario, login.mapearLogin(), endereco.mapearEndereco());
     }
 
 }

@@ -24,8 +24,8 @@ public class Gestor extends Usuario {
     @OneToMany(mappedBy = "gestor")
     private List<Restaurante> restaurantes;
 
-    public Gestor(String nome, String email, Login login, Endereco endereco) {
-        super(nome, email, login, endereco);
+    public Gestor(String nome, String email, String tipoUsuario, Login login, Endereco endereco) {
+        super(nome, email, tipoUsuario, login, endereco);
         setDataUltimaAlteracao(LocalDateTime.now());
     }
 }
