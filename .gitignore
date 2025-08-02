@@ -8,5 +8,4 @@
 .mvn/
 !**/src/main/**/.mvn/wrapper/maven-wrapper.jar
 
-# Outros arquivos comuns
-*.class
+.target/
