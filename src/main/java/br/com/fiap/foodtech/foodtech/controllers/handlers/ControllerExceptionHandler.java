@@ -5,6 +5,7 @@ import br.com.fiap.foodtech.foodtech.dto.ValidationErrorDTO;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceAlreadyExistsException;
 import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
 import br.com.fiap.foodtech.foodtech.service.exceptions.UnauthorizedException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,6 +44,12 @@ public class ControllerExceptionHandler {
             errors.add(error.getField() + ": " + error.getDefaultMessage());
         }
         return ResponseEntity.status(status.value()).body(new ValidationErrorDTO(errors, status.value()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ResourceExceptionDTO> handlerDataIntegrityViolationException(DataIntegrityViolationException e) {
+        var status = HttpStatus.CONFLICT;
+        return ResponseEntity.status(status.value()).body(new ResourceExceptionDTO(e.getMessage(), status.value()));
     }
 
 }

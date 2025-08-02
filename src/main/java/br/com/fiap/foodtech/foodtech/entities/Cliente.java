@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Table(name = "cliente")
 public class Cliente extends Usuario {
 
-    public Cliente(String nome, String email, Login login, Endereco endereco) {
-        super(nome, email, login, endereco);
+    public Cliente(String nome, String email, String tipoUsuario, Login login, Endereco endereco) {
+        super(nome, email, tipoUsuario, login, endereco);
         setDataUltimaAlteracao(LocalDateTime.now());
     }
 

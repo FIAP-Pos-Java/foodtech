@@ -25,6 +25,9 @@ public abstract class Usuario {
     @Column(name = "email", unique = true)
     private String email;
 
+    @Column(name = "tipo_usuario")
+    private String tipoUsuario;
+
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     @Column(name = "data_ultima_alteracao")
     private LocalDateTime dataUltimaAlteracao;
@@ -37,9 +40,10 @@ public abstract class Usuario {
     @JoinColumn(name = "id_endereco", referencedColumnName = "id")
     private Endereco endereco;
 
-    public Usuario(String nome, String email, Login login, Endereco endereco) {
+    public Usuario(String nome, String email, String tipoUsuario, Login login, Endereco endereco) {
         this.nome = nome;
         this.email = email;
+        this.tipoUsuario = tipoUsuario;
         this.login = login;
         this.endereco = endereco;
     }
