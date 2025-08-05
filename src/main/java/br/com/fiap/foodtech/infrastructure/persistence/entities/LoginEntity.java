@@ -4,12 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
-/**
- * LoginEntity - Representa a tabela 'login' no banco de dados.
- *
- * Esta é uma entidade JPA que mapeia para o banco, diferente da
- * entidade Login do domínio que contém regras de negócio.
- */
 @Entity
 @Table(name = "login")
 @Getter

@@ -2,11 +2,7 @@ package br.com.fiap.foodtech.infrastructure.web.controllers;
 
 import br.com.fiap.foodtech.core.adapters.controllers.ClienteController;
 import br.com.fiap.foodtech.core.dto.AlterarSenhaDTO;
-import br.com.fiap.foodtech.core.dto.ClienteDTO;
 import br.com.fiap.foodtech.core.dto.LoginDTO;
-import br.com.fiap.foodtech.core.dto.NovoClienteDTO;
-import br.com.fiap.foodtech.core.exceptions.ClienteJaExistenteException;
-import br.com.fiap.foodtech.core.exceptions.ClienteNaoEncontradoException;
 import br.com.fiap.foodtech.core.exceptions.CredenciaisInvalidasException;
 import br.com.fiap.foodtech.core.exceptions.LoginInvalidoException;
 import br.com.fiap.foodtech.core.interfaces.IDataStorageSource;
@@ -17,74 +13,25 @@ import jakarta.validation.Valid;
 
 
 @RestController
-@RequestMapping("/api/clientes")
-public class ClienteRestController {
+@RequestMapping("/api/login")
+public class LoginRestController {
 
     private final IDataStorageSource dataStorageSource;
 
-    public ClienteRestController(IDataStorageSource dataStorageSource) {
+    public LoginRestController(IDataStorageSource dataStorageSource) {
         this.dataStorageSource = dataStorageSource;
     }
 
     
-    @PostMapping
-    public ResponseEntity<?> cadastrarCliente(@Valid @RequestBody NovoClienteDTO novoClienteDTO) {
-        try {
-
-            var clienteController = ClienteController.create(dataStorageSource);
-
-
-            ClienteDTO clienteCadastrado = clienteController.cadastrar(novoClienteDTO);
-
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(clienteCadastrado);
-
-        } catch (ClienteJaExistenteException e) {
-
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ErrorResponse("Cliente já existe", e.getMessage()));
-
-        } catch (IllegalArgumentException e) {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse("Dados inválidos", e.getMessage()));
-
-        } catch (Exception e) {
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("Erro interno", "Erro inesperado no servidor"));
-        }
-    }
-
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<?> buscarClientePorId(@PathVariable Long id) {
-        try {
-            var clienteController = ClienteController.create(dataStorageSource);
-            ClienteDTO cliente = clienteController.buscarPorId(id);
-
-            return ResponseEntity.ok(cliente);
-
-        } catch (ClienteNaoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse("Cliente não encontrado", e.getMessage()));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("Erro interno", "Erro inesperado no servidor"));
-        }
-    }
-
-    
     @PostMapping("/autenticar")
-    public ResponseEntity<?> autenticarCliente(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> autenticar(@Valid @RequestBody LoginDTO loginDTO) {
         try {
             var clienteController = ClienteController.create(dataStorageSource);
             boolean autenticado = clienteController.autenticar(loginDTO);
 
             if (autenticado) {
                 return ResponseEntity.ok()
-                        .body(new SuccessResponse("Cliente autenticado com sucesso"));
+                        .body(new SuccessResponse("Usuário autenticado com sucesso"));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(new ErrorResponse("Falha na autenticação", "Credenciais inválidas"));
@@ -106,7 +53,7 @@ public class ClienteRestController {
 
     
     @PutMapping("/alterar-senha")
-    public ResponseEntity<?> alterarSenhaCliente(@Valid @RequestBody AlterarSenhaDTO alterarSenhaDTO) {
+    public ResponseEntity<?> alterarSenha(@Valid @RequestBody AlterarSenhaDTO alterarSenhaDTO) {
         try {
             var clienteController = ClienteController.create(dataStorageSource);
             clienteController.alterarSenha(alterarSenhaDTO);

@@ -1,0 +1,30 @@
+
+package br.com.fiap.foodtech.core.domain.usecases;
+
+import br.com.fiap.foodtech.core.domain.entities.ItemCardapio;
+import br.com.fiap.foodtech.core.dto.NovoItemCardapioDTO;
+import br.com.fiap.foodtech.core.interfaces.IItemCardapioGateway;
+
+public class CadastrarItemCardapioUseCase {
+    private final IItemCardapioGateway itemCardapioGateway;
+
+    private CadastrarItemCardapioUseCase(IItemCardapioGateway itemCardapioGateway) {
+        this.itemCardapioGateway = itemCardapioGateway;
+    }
+
+    public static CadastrarItemCardapioUseCase create(IItemCardapioGateway itemCardapioGateway) {
+        return new CadastrarItemCardapioUseCase(itemCardapioGateway);
+    }
+
+    public ItemCardapio run(NovoItemCardapioDTO novoItemDTO) {
+        ItemCardapio novoItem = ItemCardapio.create(
+                novoItemDTO.nome(),
+                novoItemDTO.descricao(),
+                novoItemDTO.preco(),
+                novoItemDTO.disponibilidadeRestaurante(),
+                novoItemDTO.caminhoFoto()
+        );
+
+        return itemCardapioGateway.incluir(novoItem);
+    }
+}

@@ -3,14 +3,15 @@ package br.com.fiap.foodtech.infrastructure.persistence.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
-@Table(name = "cliente")
+@Table(name = "restaurante")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClienteEntity {
+public class RestauranteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,18 +20,23 @@ public class ClienteEntity {
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
+    @Column(name = "tipo_cozinha", nullable = false)
+    private String tipoCozinha;
 
-    @Column(name = "tipo_usuario")
-    private String tipoUsuario;
+    @Column(name = "horario_abertura", nullable = false)
+    private LocalTime horarioAbertura;
+
+    @Column(name = "horario_fechamento", nullable = false)
+    private LocalTime horarioFechamento;
 
     @Column(name = "data_ultima_alteracao")
     private LocalDateTime dataUltimaAlteracao;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_login", referencedColumnName = "id")
-    private LoginEntity login;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_gestor", referencedColumnName = "id")
+    private GestorEntity gestor;
+
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_endereco", referencedColumnName = "id")
