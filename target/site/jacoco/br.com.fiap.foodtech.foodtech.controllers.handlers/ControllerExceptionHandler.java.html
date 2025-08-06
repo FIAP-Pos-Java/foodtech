@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ControllerExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodtech</a> &gt; <a href="index.source.html" class="el_package">br.com.fiap.foodtech.foodtech.controllers.handlers</a> &gt; <span class="el_source">ControllerExceptionHandler.java</span></div><h1>ControllerExceptionHandler.java</h1><pre class="source lang-java linenums">package br.com.fiap.foodtech.foodtech.controllers.handlers;
+
+import br.com.fiap.foodtech.foodtech.dto.ResourceExceptionDTO;
+import br.com.fiap.foodtech.foodtech.dto.ValidationErrorDTO;
+import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceAlreadyExistsException;
+import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
+import br.com.fiap.foodtech.foodtech.service.exceptions.UnauthorizedException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@ControllerAdvice
+<span class="fc" id="L19">public class ControllerExceptionHandler {</span>
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity&lt;ResourceExceptionDTO&gt; handlerResourceNotFoundException(ResourceNotFoundException e) {
+<span class="fc" id="L23">        var status = HttpStatus.NOT_FOUND;</span>
+<span class="fc" id="L24">        return ResponseEntity.status(status.value()).body(new ResourceExceptionDTO(e.getMessage(), status.value()));</span>
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity&lt;ResourceExceptionDTO&gt; handlerResourceAlreadyExistsException(ResourceAlreadyExistsException e) {
+<span class="nc" id="L29">        var status = HttpStatus.CONFLICT;</span>
+<span class="nc" id="L30">        return ResponseEntity.status(status.value()).body(new ResourceExceptionDTO(e.getMessage(), status.value()));</span>
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity&lt;ResourceExceptionDTO&gt; handlerUnauthorizedException(UnauthorizedException e) {
+<span class="nc" id="L35">        var status = HttpStatus.UNAUTHORIZED;</span>
+<span class="nc" id="L36">        return ResponseEntity.status(status.value()).body(new ResourceExceptionDTO(e.getMessage(), status.value()));</span>
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ValidationErrorDTO&gt; HandleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+<span class="fc" id="L41">        var status = HttpStatus.BAD_REQUEST;</span>
+<span class="fc" id="L42">        List&lt;String&gt; errors = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        for (var error : e.getBindingResult().getFieldErrors()) {</span>
+<span class="fc" id="L44">            errors.add(error.getField() + &quot;: &quot; + error.getDefaultMessage());</span>
+<span class="fc" id="L45">        }</span>
+<span class="fc" id="L46">        return ResponseEntity.status(status.value()).body(new ValidationErrorDTO(errors, status.value()));</span>
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity&lt;ResourceExceptionDTO&gt; handlerDataIntegrityViolationException(DataIntegrityViolationException e) {
+<span class="nc" id="L51">        var status = HttpStatus.CONFLICT;</span>
+<span class="nc" id="L52">        return ResponseEntity.status(status.value()).body(new ResourceExceptionDTO(e.getMessage(), status.value()));</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

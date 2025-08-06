@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClienteService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodtech</a> &gt; <a href="index.source.html" class="el_package">br.com.fiap.foodtech.foodtech.service</a> &gt; <span class="el_source">ClienteService.java</span></div><h1>ClienteService.java</h1><pre class="source lang-java linenums">package br.com.fiap.foodtech.foodtech.service;
+
+import br.com.fiap.foodtech.foodtech.dto.UsuarioDTO;
+import br.com.fiap.foodtech.foodtech.entities.Cliente;
+import br.com.fiap.foodtech.foodtech.entities.Endereco;
+import br.com.fiap.foodtech.foodtech.entities.Login;
+import br.com.fiap.foodtech.foodtech.repositories.ClienteRepository;
+import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
+import br.com.fiap.foodtech.foodtech.validation.TipoUsuarioValidator;
+import br.com.fiap.foodtech.foodtech.validation.UsuarioValidator;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+@RequiredArgsConstructor
+@Service
+public class ClienteService {
+
+    private final ClienteRepository clienteRepository;
+    private final UsuarioValidator usuarioValidator;
+    private final TipoUsuarioValidator tipoUsuarioValidator;
+
+    public Page&lt;Cliente&gt; findAllClientes(int page, int size) {
+<span class="nc" id="L26">        Pageable pageable = PageRequest.of(page, size);</span>
+<span class="nc" id="L27">        return this.clienteRepository.findAll(pageable);</span>
+    }
+
+    public Cliente findCliente(Long id) {
+<span class="nc" id="L31">        return this.clienteRepository.findById(id)</span>
+<span class="nc" id="L32">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Cliente não encontrado. ID: &quot; + id));</span>
+    }
+
+    public void saveCliente(UsuarioDTO usuarioDTO) {
+<span class="nc" id="L36">        Cliente novoCliente = usuarioDTO.mapearCliente();</span>
+<span class="nc" id="L37">        String tipoUsuario = this.tipoUsuarioValidator.validandoTipoUsuario(novoCliente);</span>
+<span class="nc" id="L38">        novoCliente.setTipoUsuario(tipoUsuario);</span>
+<span class="nc" id="L39">        this.usuarioValidator.validarEmail(novoCliente);</span>
+<span class="nc" id="L40">        this.clienteRepository.save(novoCliente);</span>
+<span class="nc" id="L41">    }</span>
+
+    public void updateCliente(Long id, UsuarioDTO usuarioDTO) {
+<span class="nc" id="L44">        Cliente clienteExistente = this.clienteRepository.findById(id)</span>
+<span class="nc" id="L45">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Cliente não encontrado. ID: &quot; + id));</span>
+
+<span class="nc" id="L47">        Cliente clienteAtualizado = usuarioDTO.mapearCliente();</span>
+<span class="nc" id="L48">        Login loginAtualizado = usuarioDTO.mapearCliente().getLogin();</span>
+
+<span class="nc" id="L50">        Login loginExistente = clienteExistente.getLogin();</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if(loginExistente == null){</span>
+<span class="nc" id="L52">            loginExistente = new Login();</span>
+<span class="nc" id="L53">            loginExistente.setLogin(loginAtualizado.getLogin());</span>
+        }
+
+<span class="nc" id="L56">        Endereco enderecoExistente = clienteExistente.getEndereco();</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if(enderecoExistente == null){</span>
+<span class="nc" id="L58">            enderecoExistente = new Endereco();</span>
+<span class="nc" id="L59">            clienteExistente.setEndereco(enderecoExistente);</span>
+        }
+
+<span class="nc" id="L62">        clienteAtualizado.setId(id);</span>
+<span class="nc" id="L63">        String tipoUsuario = this.tipoUsuarioValidator.validandoTipoUsuario(clienteAtualizado);</span>
+<span class="nc" id="L64">        clienteAtualizado.setTipoUsuario(tipoUsuario);</span>
+<span class="nc" id="L65">        clienteAtualizado.getLogin().setId(loginExistente.getId());</span>
+<span class="nc" id="L66">        clienteAtualizado.getEndereco().setId(enderecoExistente.getId());</span>
+<span class="nc" id="L67">        this.clienteRepository.save(clienteAtualizado);</span>
+<span class="nc" id="L68">    }</span>
+
+    public void deleteCliente(Long id) {
+<span class="nc" id="L71">        this.clienteRepository.findById(id).orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Cliente não encontrado. ID: &quot; + id));</span>
+<span class="nc" id="L72">        this.clienteRepository.deleteById(id);</span>
+<span class="nc" id="L73">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GestorController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodtech</a> &gt; <a href="index.source.html" class="el_package">br.com.fiap.foodtech.foodtech.controllers</a> &gt; <span class="el_source">GestorController.java</span></div><h1>GestorController.java</h1><pre class="source lang-java linenums">package br.com.fiap.foodtech.foodtech.controllers;
+
+import br.com.fiap.foodtech.foodtech.dto.UsuarioDTO;
+import br.com.fiap.foodtech.foodtech.entities.Gestor;
+import br.com.fiap.foodtech.foodtech.service.GestorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(value = &quot;/gestores&quot;)
+@Tag(name = &quot;Gestor&quot;, description = &quot;Controller responsável pelo gerenciamento dos gestores&quot;)
+public class GestorController {
+    private final GestorService gestorService;
+
+<span class="fc" id="L24">    private static final Logger logger = LoggerFactory.getLogger(GestorController.class);</span>
+
+<span class="fc" id="L26">    public GestorController(GestorService gestorService) {</span>
+<span class="fc" id="L27">        this.gestorService = gestorService;</span>
+<span class="fc" id="L28">    }</span>
+
+    @Operation(
+            description = &quot;Buscar todos os gestores paginados&quot;,
+            summary = &quot;Buscar gestores&quot;,
+            responses = {
+                    @ApiResponse(description = &quot;Ok&quot;, responseCode = &quot;200&quot;)
+            }
+    )
+    @GetMapping
+    public ResponseEntity&lt;List&lt;Gestor&gt;&gt; findAllGestors(
+            @RequestParam(&quot;page&quot;) int page,
+            @RequestParam(&quot;size&quot;) int size
+    ) {
+<span class="nc" id="L42">        logger.info(&quot;GET /gestores&quot;);</span>
+<span class="nc" id="L43">        var gestores = this.gestorService.findAllGestors(page, size);</span>
+<span class="nc" id="L44">        return new ResponseEntity&lt;&gt;(gestores.getContent(), HttpStatus.OK);</span>
+    }
+
+    @Operation(
+            description = &quot;Buscar um gestor por ID&quot;,
+            summary = &quot;Buscar gestor&quot;,
+            responses = {
+                    @ApiResponse(description = &quot;Ok&quot;, responseCode = &quot;200&quot;),
+                    @ApiResponse(description = &quot;Not Found&quot;, responseCode = &quot;404&quot;)
+            }
+    )
+    @GetMapping(&quot;/{id}&quot;)
+    public Gestor findGestor(@PathVariable(&quot;id&quot;) Long id) {
+<span class="nc" id="L57">        logger.info(&quot;GET /gestor/&quot; + id);</span>
+<span class="nc" id="L58">        return this.gestorService.findGestor(id);</span>
+    }
+
+    @Operation(
+            description = &quot;Salvar um novo gestor&quot;,
+            summary = &quot;Salvar gestor&quot;,
+            responses = {
+                    @ApiResponse(description = &quot;Created&quot;, responseCode = &quot;201&quot;),
+            }
+    )
+    @PostMapping
+    public ResponseEntity&lt;Void&gt; saveGestor(@Valid @RequestBody UsuarioDTO usuarioDTO) {
+<span class="nc" id="L70">        logger.info(&quot;POST /gestores&quot;);</span>
+<span class="nc" id="L71">        this.gestorService.saveGestor(usuarioDTO);</span>
+<span class="nc" id="L72">        return ResponseEntity.status(201).build();</span>
+    }
+
+    @Operation(
+            description = &quot;Atualizar um gestor com base no ID informado&quot;,
+            summary = &quot;Atualizar gestor&quot;,
+            responses = {
+                    @ApiResponse(description = &quot;Ok&quot;, responseCode = &quot;200&quot;),
+                    @ApiResponse(description = &quot;Not Found&quot;, responseCode = &quot;404&quot;)
+            }
+    )
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; updateGestor(@PathVariable(&quot;id&quot;) Long id, @Valid @RequestBody UsuarioDTO usuarioDTO) {
+<span class="nc" id="L85">        logger.info(&quot;PUT /gestores/&quot; + id);</span>
+<span class="nc" id="L86">        this.gestorService.updateGestor(id, usuarioDTO);</span>
+<span class="nc" id="L87">        return ResponseEntity.ok().build();</span>
+    }
+
+    @Operation(
+            description = &quot;Excluir um gestor com base no ID informado&quot;,
+            summary = &quot;Deletar gestor&quot;,
+            responses = {
+                @ApiResponse(description = &quot;NoContent&quot;, responseCode = &quot;204&quot;),
+                @ApiResponse(description = &quot;Not Found&quot;, responseCode = &quot;404&quot;)
+            }
+    )
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteGestor(@PathVariable(&quot;id&quot;) Long id) {
+<span class="nc" id="L100">        logger.info(&quot;DELETE /gestores/&quot; + id);</span>
+<span class="nc" id="L101">        this.gestorService.deleteGestor(id);</span>
+<span class="nc" id="L102">        return ResponseEntity.noContent().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

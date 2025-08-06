@@ -1,0 +1,8 @@
+br\com\fiap\foodtech\foodtech\repository\ItemCardapioRepositoryTest.class
+br\com\fiap\foodtech\foodtech\TipoUsuarioValidatorTest.class
+br\com\fiap\foodtech\foodtech\dto\ItemCardapioDTOValidationTest.class
+br\com\fiap\foodtech\foodtech\helper\ItemCardapioHelper.class
+br\com\fiap\foodtech\foodtech\controller\ItemCardapioControllerIT.class
+br\com\fiap\foodtech\foodtech\service\ItemCardapioServiceTest.class
+br\com\fiap\foodtech\foodtech\service\ItemCardapioServiceIT.class
+br\com\fiap\foodtech\foodtech\controller\ItemCardapioControllerTest.class

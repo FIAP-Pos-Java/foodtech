@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RestauranteService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodtech</a> &gt; <a href="index.source.html" class="el_package">br.com.fiap.foodtech.foodtech.service</a> &gt; <span class="el_source">RestauranteService.java</span></div><h1>RestauranteService.java</h1><pre class="source lang-java linenums">package br.com.fiap.foodtech.foodtech.service;
+
+import br.com.fiap.foodtech.foodtech.dto.EnderecoDTO;
+import br.com.fiap.foodtech.foodtech.dto.RestauranteDTO;
+import br.com.fiap.foodtech.foodtech.entities.Endereco;
+import br.com.fiap.foodtech.foodtech.entities.Restaurante;
+import br.com.fiap.foodtech.foodtech.repositories.GestorRepository;
+import br.com.fiap.foodtech.foodtech.repositories.RestauranteRepository;
+import br.com.fiap.foodtech.foodtech.service.exceptions.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+
+@Service
+public class RestauranteService {
+    private final RestauranteRepository restauranteRepository;
+    private final GestorRepository gestorRepository;
+
+<span class="fc" id="L21">    public RestauranteService(RestauranteRepository restauranteRepository, GestorRepository gestorRepository) {</span>
+<span class="fc" id="L22">        this.restauranteRepository = restauranteRepository;</span>
+<span class="fc" id="L23">        this.gestorRepository = gestorRepository;</span>
+<span class="fc" id="L24">    }</span>
+
+    public Page&lt;RestauranteDTO&gt; findAllRestaurantes(int page, int size) {
+<span class="nc" id="L27">        var pageable = PageRequest.of(page, size);</span>
+
+<span class="nc" id="L29">        var restaurantes =  this.restauranteRepository.findAll(pageable);</span>
+
+<span class="nc" id="L31">        return restaurantes.map(RestauranteService::mapFromRestauranteEntity);</span>
+    }
+
+    public RestauranteDTO findRestaurante(Long id) {
+<span class="nc" id="L35">        var restaurante = this.restauranteRepository.findById(id)</span>
+<span class="nc" id="L36">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Restaurante não encontrado. ID: &quot; + id));</span>
+
+<span class="nc" id="L38">        return mapFromRestauranteEntity(restaurante);</span>
+    }
+
+    private static RestauranteDTO mapFromRestauranteEntity(Restaurante restaurante) {
+<span class="nc" id="L42">        return new RestauranteDTO(</span>
+<span class="nc" id="L43">                restaurante.getId(),</span>
+<span class="nc" id="L44">                restaurante.getNome(),</span>
+<span class="nc" id="L45">                restaurante.getTipoCozinha(),</span>
+<span class="nc" id="L46">                restaurante.getHorarioAbertura(),</span>
+<span class="nc" id="L47">                restaurante.getHorarioFechamento(),</span>
+<span class="nc" id="L48">                restaurante.getGestor().getId(),</span>
+                new EnderecoDTO(
+<span class="nc" id="L50">                        restaurante.getEndereco().getLogradouro(),</span>
+<span class="nc" id="L51">                        restaurante.getEndereco().getNumero(),</span>
+<span class="nc" id="L52">                        restaurante.getEndereco().getBairro(),</span>
+<span class="nc" id="L53">                        restaurante.getEndereco().getCidade(),</span>
+<span class="nc" id="L54">                        restaurante.getEndereco().getEstado(),</span>
+<span class="nc" id="L55">                        restaurante.getEndereco().getCep()</span>
+                )
+        );
+    }
+
+    public void saveRestaurante(RestauranteDTO restaurante) {
+<span class="nc" id="L61">        var gestor = gestorRepository.findById(restaurante.idDonoRestaurante())</span>
+<span class="nc" id="L62">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Gestor não encontrado. ID: &quot; + restaurante.idDonoRestaurante()));</span>
+
+<span class="nc" id="L64">        var endereco = new Endereco(</span>
+<span class="nc" id="L65">                restaurante.endereco().logradouro(),</span>
+<span class="nc" id="L66">                restaurante.endereco().numero(),</span>
+<span class="nc" id="L67">                restaurante.endereco().bairro(),</span>
+<span class="nc" id="L68">                restaurante.endereco().cidade(),</span>
+<span class="nc" id="L69">                restaurante.endereco().estado(),</span>
+<span class="nc" id="L70">                restaurante.endereco().cep()</span>
+        );
+
+<span class="nc" id="L73">        var restauranteEntity = new Restaurante(</span>
+<span class="nc" id="L74">                restaurante.nome(),</span>
+<span class="nc" id="L75">                restaurante.tipoCozinha(),</span>
+<span class="nc" id="L76">                restaurante.horarioAbertura(),</span>
+<span class="nc" id="L77">                restaurante.horarioFechamento(),</span>
+                gestor,
+                endereco
+        );
+
+<span class="nc" id="L82">        this.restauranteRepository.save(restauranteEntity);</span>
+<span class="nc" id="L83">    }</span>
+
+    public void updateRestaurante(Long id, RestauranteDTO restaurante) {
+<span class="nc" id="L86">        var restauranteEntity = this.restauranteRepository.findById(id)</span>
+<span class="nc" id="L87">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Restaurante não encontrado. ID: &quot; + id));</span>
+
+<span class="nc" id="L89">        restauranteEntity.setNome(restaurante.nome());</span>
+<span class="nc" id="L90">        restauranteEntity.setTipoCozinha(restaurante.tipoCozinha());</span>
+<span class="nc" id="L91">        restauranteEntity.setHorarioAbertura(restaurante.horarioAbertura());</span>
+<span class="nc" id="L92">        restauranteEntity.setHorarioFechamento(restaurante.horarioFechamento());</span>
+<span class="nc" id="L93">        restauranteEntity.setDataUltimaAlteracao(LocalDateTime.now());</span>
+
+<span class="nc" id="L95">        restauranteEntity.setEndereco(new Endereco(</span>
+<span class="nc" id="L96">                restaurante.endereco().logradouro(),</span>
+<span class="nc" id="L97">                restaurante.endereco().numero(),</span>
+<span class="nc" id="L98">                restaurante.endereco().bairro(),</span>
+<span class="nc" id="L99">                restaurante.endereco().cidade(),</span>
+<span class="nc" id="L100">                restaurante.endereco().estado(),</span>
+<span class="nc" id="L101">                restaurante.endereco().cep()</span>
+        ));
+
+<span class="nc" id="L104">        this.restauranteRepository.save(restauranteEntity);</span>
+<span class="nc" id="L105">    }</span>
+
+    public void deleteRestaurante(Long id) {
+<span class="nc" id="L108">        Restaurante restaurante = this.restauranteRepository.findById(id)</span>
+<span class="nc" id="L109">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Restaurante não encontrado. ID: &quot; + id));</span>
+<span class="nc" id="L110">        this.restauranteRepository.delete(restaurante);</span>
+<span class="nc" id="L111">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

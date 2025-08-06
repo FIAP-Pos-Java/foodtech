@@ -88,7 +88,7 @@ public class ItemCardapioControllerTest extends ItemCardapioHelper {
 
     @SneakyThrows
     @Test
-    public  void devePermitirObterMensagem(){
+    public  void devePermitirObterItemCardapio(){
         // Arrange
         Long id = 12L;
         var itemCardapioResponse = gerarItemCardapioCompleto();

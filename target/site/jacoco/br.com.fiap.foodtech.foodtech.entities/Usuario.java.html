@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Usuario.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">foodtech</a> &gt; <a href="index.source.html" class="el_package">br.com.fiap.foodtech.foodtech.entities</a> &gt; <span class="el_source">Usuario.java</span></div><h1>Usuario.java</h1><pre class="source lang-java linenums">package br.com.fiap.foodtech.foodtech.entities;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
+@MappedSuperclass
+public abstract class Usuario {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = &quot;nome&quot;)
+    private String nome;
+
+    @Column(name = &quot;email&quot;, unique = true)
+    private String email;
+
+    @Column(name = &quot;tipo_usuario&quot;)
+    private String tipoUsuario;
+
+    @JsonFormat(pattern = &quot;dd/MM/yyyy HH:mm&quot;)
+    @Column(name = &quot;data_ultima_alteracao&quot;)
+    private LocalDateTime dataUltimaAlteracao;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = &quot;id_login&quot;, referencedColumnName = &quot;id&quot;)
+    private Login login;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = &quot;id_endereco&quot;, referencedColumnName = &quot;id&quot;)
+    private Endereco endereco;
+
+<span class="fc" id="L43">    public Usuario(String nome, String email, String tipoUsuario, Login login, Endereco endereco) {</span>
+<span class="fc" id="L44">        this.nome = nome;</span>
+<span class="fc" id="L45">        this.email = email;</span>
+<span class="fc" id="L46">        this.tipoUsuario = tipoUsuario;</span>
+<span class="fc" id="L47">        this.login = login;</span>
+<span class="fc" id="L48">        this.endereco = endereco;</span>
+<span class="fc" id="L49">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

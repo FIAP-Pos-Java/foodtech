@@ -68,7 +68,7 @@ public class ItemCardapioServiceIT extends  ItemCardapioHelper{
 
 
     @Test
-    void devePermitirObterMensagem() {
+    void devePermitirObterItemCardapio() {
 
         List<ItemCardapio> itens = itemCardapioRepository.findAll();
         var itemCardapioObtido = itemCardapioService.findItemCardapio(itens.get(0).getId());

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: br.com.fiap.foodtech.foodtech.TipoUsuarioValidatorTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.059 s -- in br.com.fiap.foodtech.foodtech.TipoUsuarioValidatorTest

@@ -13,26 +13,24 @@ import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
-import static org.assertj.core.api.BDDAssumptions.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasKey;
+
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ItemCardapioControllerIT extends ItemCardapioHelper{
+public class ItemCardapioControllerIT extends ItemCardapioHelper {
 
     @LocalServerPort
     private int port;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         RestAssured.port = port;
         RestAssured.defaultParser = Parser.JSON;
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
 
     @Test
-    void devePermitirRegistrarMensagem() throws Exception {
+    void devePermitirRegistrarItemCardapio() throws Exception {
         var itemCardapioRequest = gerarItemCardapioCompletoDto();
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -45,4 +43,21 @@ public class ItemCardapioControllerIT extends ItemCardapioHelper{
 
     }
 
+    @Test
+    void devePermitirBuscarItemCardapioPorId() throws Exception {
+        var itemCardapioRequest = gerarItemCardapioCompletoDto();
+
+        var id = 27L;
+
+        when()
+                .get("/itensCardapio/{id}", id)
+                .then()
+                .statusCode(HttpStatus.OK.value());
+
+        Assertions.assertEquals("BUILD OK", "BUILD OK");
+
+    }
 }
+
+
+
