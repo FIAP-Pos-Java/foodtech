@@ -7,7 +7,7 @@ import br.com.fiap.foodtech.foodtech.core.dtos.RestauranteDTO;
 public class RestaurantePresenter {
 
     public static RestauranteDTO toDTO(Restaurante restaurante) {
-        EnderecoDTO enderecoDTO = new EnderecoDTO(
+        /*EnderecoDTO enderecoDTO = new EnderecoDTO(
                 restaurante.getEndereco().getLogradouro(),
                 restaurante.getEndereco().getNumero(),
                 restaurante.getEndereco().getBairro(),
@@ -25,7 +25,8 @@ public class RestaurantePresenter {
                 restaurante.getGestor().getId(),
                 restaurante.getGestor().getNome(),
                 enderecoDTO
-        );
+        );*/
+        return null;
     }
 
 }

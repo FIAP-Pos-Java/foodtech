@@ -89,7 +89,7 @@ public class RestauranteGateway implements IRestauranteGateway {
 
     private Restaurante mapToRestaurante(RestauranteDataDTO restauranteData) {
 
-        Login loginGestor = new Login(
+        /*Login loginGestor = new Login(
                 restauranteData.gestorData().loginData().login(),
                 restauranteData.gestorData().loginData().senha()
         );
@@ -133,7 +133,8 @@ public class RestauranteGateway implements IRestauranteGateway {
                 restauranteData.horarioFechamento(),
                 endereco,
                 gestor
-        );
+        );*/
+        return null;
     }
 
 }
