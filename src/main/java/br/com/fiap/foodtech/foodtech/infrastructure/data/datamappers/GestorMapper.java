@@ -1,9 +1,6 @@
 package br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers;
 
-import br.com.fiap.foodtech.foodtech.core.dtos.EnderecoDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.GestorDataDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.LoginDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.NovoGestorDTO;
+import br.com.fiap.foodtech.foodtech.core.dtos.*;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.GestorEntity;
 
 public abstract class GestorMapper {
@@ -24,8 +21,47 @@ public abstract class GestorMapper {
                 dto.nome(),
                 dto.email(),
                 dto.tipoUsuario(),
-                LoginMapper.toEntity(new LoginDTO(dto.login(), dto.senha())),
-                EnderecoMapper.toEntity(new EnderecoDTO(dto.logradouro(), dto.numero(), dto.bairro(), dto.cidade(), dto.estado(), dto.cep()))
+                LoginMapper.toEntity(
+                        new NovoLoginDTO(
+                                dto.novoLogin().login(),
+                                dto.novoLogin().senha()
+                        )
+                ),
+                EnderecoMapper.toEntity(
+                        new NovoEnderecoDTO(
+                            dto.novoEndereco().logradouro(),
+                            dto.novoEndereco().numero(),
+                            dto.novoEndereco().bairro(),
+                            dto.novoEndereco().cidade(),
+                            dto.novoEndereco().estado(),
+                            dto.novoEndereco().cep()
+                        )
+                )
+        );
+    }
+
+    public static GestorEntity toEntity(GestorDataDTO dto) {
+        return new GestorEntity(
+                dto.nome(),
+                dto.email(),
+                dto.tipoUsuario(),
+                LoginMapper.toEntity(
+                        new LoginDataDTO(
+                                dto.loginData().id(),
+                                dto.loginData().login()
+                        )
+                ),
+                EnderecoMapper.toEntity(
+                        new EnderecoDataDTO(
+                                dto.enderecoData().id(),
+                                dto.enderecoData().logradouro(),
+                                dto.enderecoData().numero(),
+                                dto.enderecoData().bairro(),
+                                dto.enderecoData().cidade(),
+                                dto.enderecoData().estado(),
+                                dto.enderecoData().cep()
+                        )
+                )
         );
     }
 }

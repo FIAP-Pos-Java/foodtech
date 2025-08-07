@@ -7,18 +7,13 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Entity
+@Table(name = "gestor")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-@Entity
-@Table(name = "gestor")
 public class GestorEntity extends UsuarioEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @JsonIgnore
     @OneToMany(mappedBy = "gestor")
@@ -26,6 +21,5 @@ public class GestorEntity extends UsuarioEntity {
 
     public GestorEntity(String nome, String email, String tipoUsuario, LoginEntity login, EnderecoEntity endereco) {
         super(nome, email, tipoUsuario, login, endereco);
-        setDataUltimaAlteracao(LocalDateTime.now());
     }
 }

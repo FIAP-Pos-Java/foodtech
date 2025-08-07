@@ -1,11 +1,12 @@
 package br.com.fiap.foodtech.foodtech.core.controllers;
 
-import br.com.fiap.foodtech.foodtech.core.domain.usecases.BuscarGestorPorIdUseCase;
-import br.com.fiap.foodtech.foodtech.core.domain.usecases.CadastrarGestorUseCase;
+import br.com.fiap.foodtech.foodtech.core.domain.usecases.*;
 import br.com.fiap.foodtech.foodtech.core.dtos.GestorDTO;
+import br.com.fiap.foodtech.foodtech.core.dtos.GestorDataDTO;
 import br.com.fiap.foodtech.foodtech.core.dtos.NovoGestorDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.GestorJaExistenteException;
-import br.com.fiap.foodtech.foodtech.core.exceptions.GestorNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.gestor.GestorJaExistenteException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.gestor.GestorNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.gateways.ClienteGateway;
 import br.com.fiap.foodtech.foodtech.core.gateways.GestorGateway;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 import br.com.fiap.foodtech.foodtech.core.presenters.GestorPresenter;
@@ -26,12 +27,8 @@ public class GestorController {
         var gestorGateway = GestorGateway.create(this.dataSource);
         var useCase = CadastrarGestorUseCase.create(gestorGateway);
 
-        try {
-            var gestor = useCase.run(novoGestorDTO);
-            return GestorPresenter.toDTO(gestor);
-        } catch (GestorJaExistenteException e) {
-            throw e;
-        }
+        var gestor = useCase.run(novoGestorDTO);
+        return GestorPresenter.toDTO(gestor);
     }
 
     public GestorDTO buscarPorId(Long id) {
@@ -46,4 +43,18 @@ public class GestorController {
         }
     }
 
+    public GestorDTO atualizar(Long id, GestorDataDTO gestorDataDTO) {
+        var gestorGateway = GestorGateway.create(this.dataSource);
+        var useCase = AtualizarGestorUseCase.create(gestorGateway);
+
+        var gestor = useCase.run(id, gestorDataDTO);
+        return GestorPresenter.toDTO(gestor);
+    }
+
+    public void deletar(Long id) {
+        var gestorGateway = GestorGateway.create(this.dataSource);
+        var useCase = DeletarGestorUseCase.create(gestorGateway);
+
+        useCase.run(id);
+    }
 }

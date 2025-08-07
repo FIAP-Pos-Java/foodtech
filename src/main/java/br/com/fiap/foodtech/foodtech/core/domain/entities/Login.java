@@ -57,14 +57,6 @@ public class Login {
         }
     }
 
-    public void alterarSenha(String novaSenha) {
-        validateSenha(novaSenha);
-        if (this.senha.equals(novaSenha)) {
-            throw new IllegalArgumentException("A nova senha deve ser diferente da senha atual");
-        }
-        this.senha = novaSenha;
-    }
-
     public Long getId() {
         return id;
     }

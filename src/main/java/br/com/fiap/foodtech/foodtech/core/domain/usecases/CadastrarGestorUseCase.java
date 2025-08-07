@@ -4,7 +4,7 @@ import br.com.fiap.foodtech.foodtech.core.domain.entities.Endereco;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Login;
 import br.com.fiap.foodtech.foodtech.core.dtos.NovoGestorDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.GestorJaExistenteException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.gestor.GestorJaExistenteException;
 import br.com.fiap.foodtech.foodtech.core.gateways.IGestorGateway;
 
 public class CadastrarGestorUseCase {
@@ -26,15 +26,18 @@ public class CadastrarGestorUseCase {
             throw new GestorJaExistenteException("Gestor com email " + novoGestorDTO.email() + " já existe");
         }
 
-        Login login = new Login(novoGestorDTO.login(), novoGestorDTO.senha());
+        Login login = new Login(
+                novoGestorDTO.novoLogin().login(),
+                novoGestorDTO.novoLogin().senha()
+        );
 
         Endereco endereco = new Endereco(
-                novoGestorDTO.logradouro(),
-                novoGestorDTO.numero(),
-                novoGestorDTO.bairro(),
-                novoGestorDTO.cidade(),
-                novoGestorDTO.estado(),
-                novoGestorDTO.cep()
+                novoGestorDTO.novoEndereco().logradouro(),
+                novoGestorDTO.novoEndereco().numero(),
+                novoGestorDTO.novoEndereco().bairro(),
+                novoGestorDTO.novoEndereco().cidade(),
+                novoGestorDTO.novoEndereco().estado(),
+                novoGestorDTO.novoEndereco().cep()
         );
 
         Gestor novoGestor = new Gestor(

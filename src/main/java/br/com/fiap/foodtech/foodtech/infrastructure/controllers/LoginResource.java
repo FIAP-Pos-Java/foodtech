@@ -1,19 +1,29 @@
 package br.com.fiap.foodtech.foodtech.infrastructure.controllers;
 
+import br.com.fiap.foodtech.foodtech.core.controllers.LoginController;
+import br.com.fiap.foodtech.foodtech.core.dtos.AlterarSenhaDTO;
+import br.com.fiap.foodtech.foodtech.core.dtos.LoginDTO;
+import br.com.fiap.foodtech.foodtech.core.dtos.LoginDataDTO;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.repositories.DataRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/login")
 @Tag(name = "Login", description = "Controller responsável pela autenticação dos usuários")
 public class LoginResource {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginResource.class);
+    @Autowired
+    DataRepository dataRepository;
 
-    /*@Operation(
+    @Operation(
             description = "Efetuar autenticação do usuário ao sistema",
             summary = "Autenticar usuário",
             responses = {
@@ -22,10 +32,10 @@ public class LoginResource {
             }
     )
     @PostMapping
-    public ResponseEntity<Void> autenticar(@RequestBody LoginDTO loginDTO){
-        logger.info("POST -> /login");
-        this.loginService.validarLogin(loginDTO);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> autenticar(@RequestBody LoginDTO loginDTO){
+        LoginController loginController = LoginController.create(dataRepository);
+        loginController.autenticar(loginDTO);
+        return new ResponseEntity<>("Login efetuado com sucesso!", HttpStatus.OK);
     }
 
     @Operation(
@@ -37,10 +47,10 @@ public class LoginResource {
             }
     )
     @PutMapping
-    public ResponseEntity<Void> updateSenha(@RequestBody UpdateSenhaDTO updateSenhaDTO){
-        logger.info("PUT -> /login");
-        this.loginService.updateSenha(updateSenhaDTO);
-        return ResponseEntity.noContent().build();
-    }*/
+    public ResponseEntity<String> updateSenha(@RequestBody AlterarSenhaDTO alterarSenhaDTO){
+        LoginController loginController = LoginController.create(dataRepository);
+        loginController.alterarSenha(alterarSenhaDTO);
+        return new ResponseEntity<>("Senha alterada com sucesso!", HttpStatus.OK);
+    }
 
 }

@@ -6,6 +6,6 @@ public interface ILoginGateway {
 
     Login buscarPorLogin(String login);
 
-    Login atualizar(Login login);
+    void alterarSenha(Login login);
 
 }

@@ -1,10 +1,11 @@
 package br.com.fiap.foodtech.foodtech.core.gateways;
 
+import br.com.fiap.foodtech.foodtech.core.domain.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Endereco;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Login;
-import br.com.fiap.foodtech.foodtech.core.dtos.NovoGestorDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.GestorNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.dtos.*;
+import br.com.fiap.foodtech.foodtech.core.exceptions.gestor.GestorNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 
 public class GestorGateway implements IGestorGateway {
@@ -25,25 +26,7 @@ public class GestorGateway implements IGestorGateway {
         if (gestorData == null) {
             throw new GestorNaoEncontradoException("Gestor com ID " + id + " não encontrado");
         }
-
-        Login login = new Login(gestorData.loginData().login(), gestorData.loginData().senha());
-        Endereco endereco = new Endereco(
-                gestorData.enderecoData().logradouro(),
-                gestorData.enderecoData().numero(),
-                gestorData.enderecoData().bairro(),
-                gestorData.enderecoData().cidade(),
-                gestorData.enderecoData().estado(),
-                gestorData.enderecoData().cep()
-        );
-
-        return new Gestor(
-                gestorData.id(),
-                gestorData.nome(),
-                gestorData.email(),
-                gestorData.tipoUsuario(),
-                endereco,
-                login
-        );
+        return dtoToGestor(gestorData);
     }
 
     @Override
@@ -52,25 +35,7 @@ public class GestorGateway implements IGestorGateway {
         if (gestorData == null) {
             return null;
         }
-
-        Login login = new Login(gestorData.loginData().login(), gestorData.loginData().senha());
-        Endereco endereco = new Endereco(
-                gestorData.enderecoData().logradouro(),
-                gestorData.enderecoData().numero(),
-                gestorData.enderecoData().bairro(),
-                gestorData.enderecoData().cidade(),
-                gestorData.enderecoData().estado(),
-                gestorData.enderecoData().cep()
-        );
-
-        return new Gestor(
-                gestorData.id(),
-                gestorData.nome(),
-                gestorData.email(),
-                gestorData.tipoUsuario(),
-                endereco,
-                login
-        );
+        return dtoToGestor(gestorData);
     }
 
     @Override
@@ -79,19 +44,56 @@ public class GestorGateway implements IGestorGateway {
                 gestor.getNome(),
                 gestor.getEmail(),
                 gestor.getTipoUsuario(),
-                gestor.getLogin().getLogin(),
-                gestor.getLogin().getSenha(),
-                gestor.getEndereco().getLogradouro(),
-                gestor.getEndereco().getNumero(),
-                gestor.getEndereco().getBairro(),
-                gestor.getEndereco().getCidade(),
-                gestor.getEndereco().getEstado(),
-                gestor.getEndereco().getCep()
+                new NovoLoginDTO(
+                        gestor.getLogin().getLogin(),
+                        gestor.getLogin().getSenha()
+                ),
+                new NovoEnderecoDTO(
+                        gestor.getEndereco().getLogradouro(),
+                        gestor.getEndereco().getNumero(),
+                        gestor.getEndereco().getBairro(),
+                        gestor.getEndereco().getCidade(),
+                        gestor.getEndereco().getEstado(),
+                        gestor.getEndereco().getCep()
+                )
         );
-
         var gestorSalvo = dataSource.incluirGestor(novoGestorDTO);
+        return dtoToGestor(gestorSalvo);
+    }
 
-        Login login = new Login(gestorSalvo.loginData().login(), gestorSalvo.loginData().senha());
+    @Override
+    public Gestor atualizar(Gestor gestor) {
+        GestorDataDTO gestorDataDTO = new GestorDataDTO(
+                gestor.getId(),
+                gestor.getNome(),
+                gestor.getEmail(),
+                gestor.getTipoUsuario(),
+                new LoginDataDTO(
+                        gestor.getLogin().getId(),
+                        gestor.getLogin().getLogin()
+                ),
+                new EnderecoDataDTO(
+                        gestor.getEndereco().getId(),
+                        gestor.getEndereco().getLogradouro(),
+                        gestor.getEndereco().getNumero(),
+                        gestor.getEndereco().getBairro(),
+                        gestor.getEndereco().getCidade(),
+                        gestor.getEndereco().getEstado(),
+                        gestor.getEndereco().getCep()
+                )
+        );
+        var gestorAtualizado = dataSource.atualizarGestor(gestorDataDTO);
+        return dtoToGestor(gestorAtualizado);
+    }
+
+    @Override
+    public void deletar(Long id) {
+        dataSource.deletarGestor(id);
+    }
+
+    private Gestor dtoToGestor(GestorDataDTO gestorSalvo) {
+        Login login = new Login(gestorSalvo.loginData().id(), gestorSalvo.loginData().login());
+
         Endereco endereco = new Endereco(
                 gestorSalvo.enderecoData().logradouro(),
                 gestorSalvo.enderecoData().numero(),
@@ -110,16 +112,4 @@ public class GestorGateway implements IGestorGateway {
                 login
         );
     }
-
-    @Override
-    public Gestor atualizar(Gestor gestor) {
-
-        throw new UnsupportedOperationException("Não implementado ainda");
-    }
-
-    @Override
-    public void deletar(Long id) {
-        dataSource.deletarGestor(id);
-    }
-
 }
