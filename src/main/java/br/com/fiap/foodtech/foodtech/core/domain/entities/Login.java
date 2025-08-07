@@ -17,6 +17,11 @@ public class Login {
         setSenha(senha);
     }
 
+    public Login(Long id, String login) {
+        setId(id);
+        setLogin(login);
+    }
+
     private void setId(Long id) {
         if (id != null && id <= 0) {
             throw new IllegalArgumentException("ID deve ser maior que zero");

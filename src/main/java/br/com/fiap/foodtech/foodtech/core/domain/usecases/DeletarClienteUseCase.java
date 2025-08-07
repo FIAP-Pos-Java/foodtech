@@ -4,26 +4,24 @@ import br.com.fiap.foodtech.foodtech.core.domain.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.core.exceptions.cliente.ClienteNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.IClienteGateway;
 
-public class BuscarClientePorIdUseCase {
+public class DeletarClienteUseCase {
 
     private final IClienteGateway clienteGateway;
 
-    public BuscarClientePorIdUseCase(IClienteGateway clienteGateway) {
+    private DeletarClienteUseCase(IClienteGateway clienteGateway) {
         this.clienteGateway = clienteGateway;
     }
 
-    public static BuscarClientePorIdUseCase create(IClienteGateway clienteGateway) {
-        return new BuscarClientePorIdUseCase(clienteGateway);
+    public static DeletarClienteUseCase create(IClienteGateway clienteGateway) {
+        return new DeletarClienteUseCase(clienteGateway);
     }
 
-    public Cliente run(Long id) throws ClienteNaoEncontradoException {
-        Cliente cliente = clienteGateway.buscarPorId(id);
+    public void run(Long id) {
+        Cliente clienteExistente = clienteGateway.buscarPorId(id);
 
-        if (cliente == null) {
+        if (clienteExistente == null) {
             throw new ClienteNaoEncontradoException("Cliente com ID " + id + " não encontrado");
         }
-
-        return cliente;
+        clienteGateway.deletar(id);
     }
-
 }

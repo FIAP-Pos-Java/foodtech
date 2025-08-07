@@ -1,19 +1,17 @@
 package br.com.fiap.foodtech.foodtech.infrastructure.controllers;
 
 import br.com.fiap.foodtech.foodtech.core.controllers.ClienteController;
-import br.com.fiap.foodtech.foodtech.core.dtos.ClienteDTO;
+import br.com.fiap.foodtech.foodtech.core.dtos.*;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.repositories.DataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/clientes")
@@ -22,8 +20,6 @@ public class ClienteResource {
 
     @Autowired
     DataRepository dataRepository;
-
-    private static final Logger logger = LoggerFactory.getLogger(ClienteResource.class);
 
     /*@Operation(
             description = "Buscar todos os clientes paginados",
@@ -51,13 +47,12 @@ public class ClienteResource {
             }
     )
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ClienteDTO buscarPorId(@PathVariable("id") Long id) {
-        logger.info("GET /cliente/" + id);
+    public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable("id") Long id) {
         ClienteController clienteController = ClienteController.create(dataRepository);
-        return clienteController.buscarPorId(id);
+        return new ResponseEntity<>(clienteController.buscarPorId(id), HttpStatus.OK);
     }
 
-    /*@Operation(
+    @Operation(
             description = "Salvar um novo cliente",
             summary = "Salvar cliente",
             responses = {
@@ -65,9 +60,9 @@ public class ClienteResource {
             }
     )
     @PostMapping
-    public ResponseEntity<Void> saveCliente(@Valid @RequestBody UsuarioDTO usuarioDTO) {
-        logger.info("POST /clientes");
-        this.clienteService.saveCliente(usuarioDTO);
+    public ResponseEntity<Void> saveCliente(@Valid @RequestBody NovoClienteDTO novoClienteDTO) {
+        ClienteController clienteController = ClienteController.create(dataRepository);
+        clienteController.cadastrar(novoClienteDTO);
         return ResponseEntity.status(201).build();
     }
 
@@ -80,9 +75,9 @@ public class ClienteResource {
             }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateCliente(@PathVariable("id") Long id, @Valid @RequestBody UsuarioDTO usuarioDTO) {
-        logger.info("PUT /clientes/" + id);
-        this.clienteService.updateCliente(id, usuarioDTO);
+    public ResponseEntity<Void> updateCliente(@PathVariable("id") Long id, @Valid @RequestBody ClienteDataDTO clienteDataDTO) {
+        ClienteController clienteController = ClienteController.create(dataRepository);
+        clienteController.atualizar(id, clienteDataDTO);
         return ResponseEntity.ok().build();
     }
 
@@ -96,9 +91,9 @@ public class ClienteResource {
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCliente(@PathVariable("id") Long id) {
-        logger.info("DELETE /clientes/" + id);
-        this.clienteService.deleteCliente(id);
+        ClienteController clienteController = ClienteController.create(dataRepository);
+        clienteController.deletar(id);
         return ResponseEntity.noContent().build();
-    }*/
+    }
 
 }
