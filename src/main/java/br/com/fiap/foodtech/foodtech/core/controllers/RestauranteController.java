@@ -5,8 +5,8 @@ import br.com.fiap.foodtech.foodtech.core.domain.usecases.CadastrarRestauranteUs
 import br.com.fiap.foodtech.foodtech.core.domain.usecases.ListarRestaurantesUseCase;
 import br.com.fiap.foodtech.foodtech.core.dtos.NovoRestauranteDTO;
 import br.com.fiap.foodtech.foodtech.core.dtos.RestauranteDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.GestorNaoEncontradoException;
-import br.com.fiap.foodtech.foodtech.core.exceptions.RestauranteNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.gestor.GestorNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.restaurante.RestauranteNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.GestorGateway;
 import br.com.fiap.foodtech.foodtech.core.gateways.RestauranteGateway;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;

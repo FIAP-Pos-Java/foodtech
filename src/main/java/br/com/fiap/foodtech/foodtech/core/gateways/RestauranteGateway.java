@@ -6,7 +6,7 @@ import br.com.fiap.foodtech.foodtech.core.domain.entities.Login;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Restaurante;
 import br.com.fiap.foodtech.foodtech.core.dtos.NovoRestauranteDTO;
 import br.com.fiap.foodtech.foodtech.core.dtos.RestauranteDataDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.RestauranteNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.restaurante.RestauranteNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 
 import java.util.List;

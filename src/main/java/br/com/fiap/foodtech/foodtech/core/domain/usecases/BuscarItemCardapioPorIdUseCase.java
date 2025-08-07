@@ -1,7 +1,7 @@
 package br.com.fiap.foodtech.foodtech.core.domain.usecases;
 
 import br.com.fiap.foodtech.foodtech.core.domain.entities.ItemCardapio;
-import br.com.fiap.foodtech.foodtech.core.exceptions.ItemCardapioNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.itemcardapio.ItemCardapioNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.IItemCardapioGateway;
 
 public class BuscarItemCardapioPorIdUseCase {

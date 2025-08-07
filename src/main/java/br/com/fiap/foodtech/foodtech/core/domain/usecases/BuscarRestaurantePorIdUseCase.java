@@ -1,7 +1,7 @@
 package br.com.fiap.foodtech.foodtech.core.domain.usecases;
 
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Restaurante;
-import br.com.fiap.foodtech.foodtech.core.exceptions.RestauranteNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.restaurante.RestauranteNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.IRestauranteGateway;
 
 public class BuscarRestaurantePorIdUseCase {

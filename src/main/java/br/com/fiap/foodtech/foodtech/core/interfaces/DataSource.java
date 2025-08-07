@@ -8,12 +8,14 @@ public interface DataSource {
 
     ClienteDataDTO obterClientePorId(Long id);
     ClienteDataDTO obterClientePorEmail(String email);
-    ClienteDataDTO incluirCliente(NovoClienteDTO novoCliente);
+    ClienteDataDTO incluirCliente(NovoClienteDTO novoClienteDTO);
+    ClienteDataDTO atualizarCliente(ClienteDataDTO clienteDataDTO);
     void deletarCliente(Long id);
 
     GestorDataDTO obterGestorPorId(Long id);
     GestorDataDTO obterGestorPorEmail(String email);
     GestorDataDTO incluirGestor(NovoGestorDTO novoGestor);
+    GestorDataDTO atualizarGestor(GestorDataDTO gestorDataDTO);
     void deletarGestor(Long id);
 
     ItemCardapioDataDTO obterItemCardapioPorId(Long id);
@@ -29,6 +31,6 @@ public interface DataSource {
     void deletarRestaurante(Long id);
 
     LoginDataDTO obterLoginPorLogin(String login);
-    void atualizarLogin(Long id, String novaSenha);
+    void atualizarSenha(LoginDTO loginDTO);
 
 }

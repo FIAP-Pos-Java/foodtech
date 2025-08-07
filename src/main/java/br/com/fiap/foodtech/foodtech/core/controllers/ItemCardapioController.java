@@ -5,7 +5,7 @@ import br.com.fiap.foodtech.foodtech.core.domain.usecases.CadastrarItemCardapioU
 import br.com.fiap.foodtech.foodtech.core.domain.usecases.ListarItensCardapioUseCase;
 import br.com.fiap.foodtech.foodtech.core.dtos.ItemCardapioDTO;
 import br.com.fiap.foodtech.foodtech.core.dtos.NovoItemCardapioDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.ItemCardapioNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.itemcardapio.ItemCardapioNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.ItemCardapioGateway;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 import br.com.fiap.foodtech.foodtech.core.presenters.ItemCardapioPresenter;

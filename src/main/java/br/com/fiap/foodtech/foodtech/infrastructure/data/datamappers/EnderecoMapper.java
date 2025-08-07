@@ -2,6 +2,7 @@ package br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers;
 
 import br.com.fiap.foodtech.foodtech.core.dtos.EnderecoDTO;
 import br.com.fiap.foodtech.foodtech.core.dtos.EnderecoDataDTO;
+import br.com.fiap.foodtech.foodtech.core.dtos.NovoEnderecoDTO;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.EnderecoEntity;
 
 public abstract class EnderecoMapper {
@@ -18,7 +19,18 @@ public abstract class EnderecoMapper {
         );
     }
 
-    protected static EnderecoEntity toEntity(EnderecoDTO dto) {
+    protected static EnderecoEntity toEntity(NovoEnderecoDTO dto) {
+        return new EnderecoEntity(
+                dto.logradouro(),
+                dto.numero(),
+                dto.bairro(),
+                dto.cidade(),
+                dto.estado(),
+                dto.cep()
+        );
+    }
+
+    protected static EnderecoEntity toEntity(EnderecoDataDTO dto) {
         return new EnderecoEntity(
                 dto.logradouro(),
                 dto.numero(),

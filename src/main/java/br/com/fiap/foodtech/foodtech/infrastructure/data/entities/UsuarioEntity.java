@@ -8,9 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @EqualsAndHashCode
 @MappedSuperclass
 public abstract class UsuarioEntity {
@@ -45,6 +43,21 @@ public abstract class UsuarioEntity {
         this.tipoUsuario = tipoUsuario;
         this.login = login;
         this.endereco = endereco;
+    }
+
+    public UsuarioEntity(Long id, String nome, String email, String tipoUsuario, LoginEntity login, EnderecoEntity endereco) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.tipoUsuario = tipoUsuario;
+        this.login = login;
+        this.endereco = endereco;
+    }
+
+    @PrePersist
+    @PreUpdate
+    protected void onCreateOrUpdate() {
+        this.dataUltimaAlteracao = LocalDateTime.now();
     }
 
 }

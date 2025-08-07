@@ -3,7 +3,7 @@ package br.com.fiap.foodtech.foodtech.core.gateways;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.ItemCardapio;
 import br.com.fiap.foodtech.foodtech.core.dtos.ItemCardapioDataDTO;
 import br.com.fiap.foodtech.foodtech.core.dtos.NovoItemCardapioDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.ItemCardapioNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.itemcardapio.ItemCardapioNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 
 import java.util.List;

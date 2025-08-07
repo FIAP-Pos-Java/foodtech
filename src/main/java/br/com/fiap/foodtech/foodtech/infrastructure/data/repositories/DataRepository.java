@@ -4,9 +4,10 @@ import br.com.fiap.foodtech.foodtech.core.dtos.*;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.ClienteMapper;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.GestorMapper;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.LoginMapper;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.ClienteEntity;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.GestorEntity;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.exceptions.ResourceNotFoundException;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.LoginEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -34,7 +35,7 @@ public class DataRepository implements DataSource {
     public ClienteDataDTO obterClientePorId(Long id) {
         ClienteEntity cliente = this.clienteRepository.findById(id).orElse(null);
         if (cliente == null) {
-            throw new ResourceNotFoundException("Cliente não encontrado");
+            return null;
         }
         return ClienteMapper.toDTO(cliente);
     }
@@ -43,7 +44,7 @@ public class DataRepository implements DataSource {
     public ClienteDataDTO obterClientePorEmail(String email) {
         ClienteEntity cliente = this.clienteRepository.findByEmail(email);
         if (cliente == null) {
-            throw new ResourceNotFoundException("Cliente não encontrado");
+            return null;
         }
         return ClienteMapper.toDTO(cliente);
     }
@@ -51,6 +52,12 @@ public class DataRepository implements DataSource {
     @Override
     public ClienteDataDTO incluirCliente(NovoClienteDTO novoCliente) {
         ClienteEntity cliente = this.clienteRepository.save(ClienteMapper.toEntity(novoCliente));
+        return ClienteMapper.toDTO(cliente);
+    }
+
+    @Override
+    public ClienteDataDTO atualizarCliente(ClienteDataDTO clienteDataDTO) {
+        ClienteEntity cliente = this.clienteRepository.save(ClienteMapper.toEntity(clienteDataDTO));
         return ClienteMapper.toDTO(cliente);
     }
 
@@ -63,7 +70,7 @@ public class DataRepository implements DataSource {
     public GestorDataDTO obterGestorPorId(Long id) {
         GestorEntity gestor = this.gestorRepository.findById(id).orElse(null);
         if (gestor == null) {
-            throw new ResourceNotFoundException("Gestor não encontrado");
+            return null;
         }
         return GestorMapper.toDTO(gestor);
     }
@@ -72,7 +79,7 @@ public class DataRepository implements DataSource {
     public GestorDataDTO obterGestorPorEmail(String email) {
         GestorEntity gestor = this.gestorRepository.findByEmail(email);
         if (gestor == null) {
-            throw new ResourceNotFoundException("Gestor não encontrado");
+            return null;
         }
         return GestorMapper.toDTO(gestor);
     }
@@ -80,6 +87,12 @@ public class DataRepository implements DataSource {
     @Override
     public GestorDataDTO incluirGestor(NovoGestorDTO novoGestor) {
         GestorEntity gestor = this.gestorRepository.save(GestorMapper.toEntity(novoGestor));
+        return GestorMapper.toDTO(gestor);
+    }
+
+    @Override
+    public GestorDataDTO atualizarGestor(GestorDataDTO gestorDataDTO) {
+        GestorEntity gestor = this.gestorRepository.save(GestorMapper.toEntity(gestorDataDTO));
         return GestorMapper.toDTO(gestor);
     }
 
@@ -140,11 +153,16 @@ public class DataRepository implements DataSource {
 
     @Override
     public LoginDataDTO obterLoginPorLogin(String login) {
-        return null;
+        LoginEntity loginEntity = this.loginRepository.findByLogin(login).orElse(null);
+        if (loginEntity == null) {
+            return null;
+        }
+        return LoginMapper.toDTO(loginEntity);
     }
 
     @Override
-    public void atualizarLogin(Long id, String novaSenha) {
-
+    public void atualizarSenha(LoginDTO loginDTO) {
+        LoginEntity loginEntity = LoginMapper.toEntity(loginDTO);
+        this.loginRepository.save(loginEntity);
     }
 }

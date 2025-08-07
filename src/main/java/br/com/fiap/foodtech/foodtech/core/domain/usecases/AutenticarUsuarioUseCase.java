@@ -2,8 +2,8 @@ package br.com.fiap.foodtech.foodtech.core.domain.usecases;
 
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Login;
 import br.com.fiap.foodtech.foodtech.core.dtos.LoginDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.CredenciaisInvalidasException;
-import br.com.fiap.foodtech.foodtech.core.exceptions.LoginInvalidoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.credenciais.CredenciaisInvalidasException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.credenciais.LoginInvalidoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.ILoginGateway;
 
 public class AutenticarUsuarioUseCase {

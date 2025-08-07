@@ -53,18 +53,4 @@ public class ClienteController {
         useCase.run(id);
     }
 
-    public boolean autenticar(LoginDTO loginDTO) {
-        var loginGateway = LoginGateway.create(this.dataSource);
-        var useCase = AutenticarUsuarioUseCase.create(loginGateway);
-
-        return useCase.run(loginDTO);
-    }
-
-    public void alterarSenha(AlterarSenhaDTO alterarSenhaDTO) {
-        var loginGateway = LoginGateway.create(this.dataSource);
-        var useCase = AlterarSenhaUseCase.create(loginGateway);
-
-        useCase.run(alterarSenhaDTO);
-    }
-
 }

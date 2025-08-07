@@ -4,7 +4,7 @@ import br.com.fiap.foodtech.foodtech.core.domain.entities.Endereco;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Restaurante;
 import br.com.fiap.foodtech.foodtech.core.dtos.NovoRestauranteDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.GestorNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.gestor.GestorNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.IGestorGateway;
 import br.com.fiap.foodtech.foodtech.core.gateways.IRestauranteGateway;
 
