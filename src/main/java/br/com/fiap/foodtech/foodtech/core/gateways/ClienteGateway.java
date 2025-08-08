@@ -5,6 +5,10 @@ import br.com.fiap.foodtech.foodtech.core.domain.entities.Endereco;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Login;
 import br.com.fiap.foodtech.foodtech.core.dtos.*;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.ClienteMapper;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ClienteGateway implements IClienteGateway {
 
@@ -16,6 +20,12 @@ public class ClienteGateway implements IClienteGateway {
 
     public static ClienteGateway create(DataSource dataStorageSource) {
         return new ClienteGateway(dataStorageSource);
+    }
+
+    @Override
+    public Pagina<Cliente> buscarTodos(Paginacao paginacao) {
+        var paginaCliente = dataSource.obterTodosClientes(paginacao);
+        return new Pagina<>(paginaCliente.content().stream().map(clienteDTO -> dtoToCliente(clienteDTO)).toList(), paginaCliente.totalElements());
     }
 
     @Override
@@ -92,15 +102,15 @@ public class ClienteGateway implements IClienteGateway {
     }
 
     private Cliente dtoToCliente(ClienteDataDTO clienteSalvo) {
-        Login login = new Login(clienteSalvo.loginData().id(), clienteSalvo.loginData().login());
+        Login login = new Login(clienteSalvo.login().id(), clienteSalvo.login().login());
 
         Endereco endereco = new Endereco(
-                clienteSalvo.enderecoData().logradouro(),
-                clienteSalvo.enderecoData().numero(),
-                clienteSalvo.enderecoData().bairro(),
-                clienteSalvo.enderecoData().cidade(),
-                clienteSalvo.enderecoData().estado(),
-                clienteSalvo.enderecoData().cep()
+                clienteSalvo.endereco().logradouro(),
+                clienteSalvo.endereco().numero(),
+                clienteSalvo.endereco().bairro(),
+                clienteSalvo.endereco().cidade(),
+                clienteSalvo.endereco().estado(),
+                clienteSalvo.endereco().cep()
         );
 
         return new Cliente(

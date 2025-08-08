@@ -9,9 +9,13 @@ import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.ClienteEntity;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.GestorEntity;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.LoginEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class DataRepository implements DataSource {
@@ -30,6 +34,13 @@ public class DataRepository implements DataSource {
 
     @Autowired
     RestauranteRepository restauranteRepository;
+
+    @Override
+    public Pagina<ClienteDataDTO> obterTodosClientes(Paginacao paginacao) {
+        Pageable pageable = PageRequest.of(paginacao.page(), paginacao.size());
+        var page = clienteRepository.findAll(pageable);
+        return new Pagina<>(page.getContent().stream().map(ClienteMapper::toDTO).toList(), (int) page.getTotalElements());
+    }
 
     @Override
     public ClienteDataDTO obterClientePorId(Long id) {

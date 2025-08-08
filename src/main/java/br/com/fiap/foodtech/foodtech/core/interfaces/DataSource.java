@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface DataSource {
 
+    Pagina<ClienteDataDTO> obterTodosClientes(Paginacao paginacao);
     ClienteDataDTO obterClientePorId(Long id);
     ClienteDataDTO obterClientePorEmail(String email);
     ClienteDataDTO incluirCliente(NovoClienteDTO novoClienteDTO);

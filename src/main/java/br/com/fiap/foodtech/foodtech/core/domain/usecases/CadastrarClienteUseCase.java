@@ -28,17 +28,17 @@ public class CadastrarClienteUseCase {
         }
 
         Login login = new Login(
-                novoClienteDTO.novoLogin().login(),
-                novoClienteDTO.novoLogin().senha()
+                novoClienteDTO.login().login(),
+                novoClienteDTO.login().senha()
         );
 
         Endereco endereco = new Endereco(
-                novoClienteDTO.novoEndereco().logradouro(),
-                novoClienteDTO.novoEndereco().numero(),
-                novoClienteDTO.novoEndereco().bairro(),
-                novoClienteDTO.novoEndereco().cidade(),
-                novoClienteDTO.novoEndereco().estado(),
-                novoClienteDTO.novoEndereco().cep()
+                novoClienteDTO.endereco().logradouro(),
+                novoClienteDTO.endereco().numero(),
+                novoClienteDTO.endereco().bairro(),
+                novoClienteDTO.endereco().cidade(),
+                novoClienteDTO.endereco().estado(),
+                novoClienteDTO.endereco().cep()
         );
 
         Cliente novoCliente = new Cliente(

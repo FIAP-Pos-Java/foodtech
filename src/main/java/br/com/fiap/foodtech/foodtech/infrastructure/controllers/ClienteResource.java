@@ -21,7 +21,7 @@ public class ClienteResource {
     @Autowired
     DataRepository dataRepository;
 
-    /*@Operation(
+    @Operation(
             description = "Buscar todos os clientes paginados",
             summary = "Buscar clientes",
             responses = {
@@ -29,14 +29,14 @@ public class ClienteResource {
             }
     )
     @GetMapping
-    public ResponseEntity<List<ClienteEntity>> findAllClientes(
+    public ResponseEntity<Pagina<ClienteDTO>> buscarTodosClientes(
             @RequestParam("page") int page,
             @RequestParam("size") int size
     ) {
-        logger.info("GET /clientes");
-        var clientes = this.clienteService.findAllClientes(page, size);
-        return new ResponseEntity<>(clientes.getContent(), HttpStatus.OK);
-    }*/
+        ClienteController clienteController = ClienteController.create(dataRepository);
+        Paginacao paginacao = new Paginacao(page, size);
+        return new ResponseEntity<>(clienteController.buscarTodosClientes(paginacao), HttpStatus.OK);
+    }
 
     @Operation(
             description = "Buscar um cliente por ID",

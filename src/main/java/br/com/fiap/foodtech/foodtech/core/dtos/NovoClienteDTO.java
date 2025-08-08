@@ -4,6 +4,6 @@ public record NovoClienteDTO(
         String nome,
         String email,
         String tipoUsuario,
-        NovoLoginDTO novoLogin,
-        NovoEnderecoDTO novoEndereco
+        NovoLoginDTO login,
+        NovoEnderecoDTO endereco
 ) { }

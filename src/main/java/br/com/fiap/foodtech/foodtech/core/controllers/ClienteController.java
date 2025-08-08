@@ -2,13 +2,12 @@ package br.com.fiap.foodtech.foodtech.core.controllers;
 
 import br.com.fiap.foodtech.foodtech.core.domain.usecases.*;
 import br.com.fiap.foodtech.foodtech.core.dtos.*;
-import br.com.fiap.foodtech.foodtech.core.exceptions.cliente.ClienteNaoEncontradoException;
-import br.com.fiap.foodtech.foodtech.core.exceptions.credenciais.CredenciaisInvalidasException;
-import br.com.fiap.foodtech.foodtech.core.exceptions.credenciais.LoginInvalidoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.ClienteGateway;
-import br.com.fiap.foodtech.foodtech.core.gateways.LoginGateway;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 import br.com.fiap.foodtech.foodtech.core.presenters.ClientePresenter;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ClienteController {
 
@@ -22,12 +21,12 @@ public class ClienteController {
         return new ClienteController(dataSource);
     }
 
-    public ClienteDTO cadastrar(NovoClienteDTO novoClienteDTO) {
-        var clienteGateway = ClienteGateway.create(this.dataSource);
-        var useCase = CadastrarClienteUseCase.create(clienteGateway);
+    public Pagina<ClienteDTO> buscarTodosClientes(Paginacao paginacao) {
+        var clienteGateway = new ClienteGateway(this.dataSource);
+        var useCase = new ListarClientesUseCase(clienteGateway);
 
-        var cliente = useCase.run(novoClienteDTO);
-        return ClientePresenter.toDTO(cliente);
+        var paginaCliente = useCase.run(paginacao);
+        return new Pagina<>(paginaCliente.content().stream().map(ClientePresenter::toDTO).toList(), paginaCliente.totalElements());
     }
 
     public ClienteDTO buscarPorId(Long id) {
@@ -35,6 +34,14 @@ public class ClienteController {
         var useCase = new BuscarClientePorIdUseCase(clienteGateway);
 
         var cliente = useCase.run(id);
+        return ClientePresenter.toDTO(cliente);
+    }
+
+    public ClienteDTO cadastrar(NovoClienteDTO novoClienteDTO) {
+        var clienteGateway = ClienteGateway.create(this.dataSource);
+        var useCase = CadastrarClienteUseCase.create(clienteGateway);
+
+        var cliente = useCase.run(novoClienteDTO);
         return ClientePresenter.toDTO(cliente);
     }
 

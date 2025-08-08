@@ -29,17 +29,17 @@ public class AtualizarClienteUseCase {
 
         Login login = new Login(
                 clienteExistente.getLogin().getId(),
-                clienteDataDTO.loginData().login()
+                clienteDataDTO.login().login()
         );
 
         Endereco endereco = new Endereco(
                 clienteExistente.getEndereco().getId(),
-                clienteDataDTO.enderecoData().logradouro(),
-                clienteDataDTO.enderecoData().numero(),
-                clienteDataDTO.enderecoData().bairro(),
-                clienteDataDTO.enderecoData().cidade(),
-                clienteDataDTO.enderecoData().estado(),
-                clienteDataDTO.enderecoData().cep()
+                clienteDataDTO.endereco().logradouro(),
+                clienteDataDTO.endereco().numero(),
+                clienteDataDTO.endereco().bairro(),
+                clienteDataDTO.endereco().cidade(),
+                clienteDataDTO.endereco().estado(),
+                clienteDataDTO.endereco().cep()
         );
 
         Cliente clienteAtualizado = new Cliente(
