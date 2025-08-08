@@ -2,6 +2,7 @@ package br.com.fiap.foodtech.foodtech.core.domain.entities;
 
 import java.time.LocalTime;
 
+
 public class Restaurante {
 
     private Long id;
