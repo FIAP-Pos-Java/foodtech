@@ -2,15 +2,16 @@ package br.com.fiap.foodtech.foodtech.infrastructure.data.repositories;
 
 import br.com.fiap.foodtech.foodtech.core.dtos.*;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.ClienteMapper;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.GestorMapper;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.ClienteEntity;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.GestorEntity;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.exceptions.ResourceNotFoundException;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.*;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class DataRepository implements DataSource {
@@ -31,10 +32,17 @@ public class DataRepository implements DataSource {
     RestauranteRepository restauranteRepository;
 
     @Override
+    public Pagina<ClienteDataDTO> obterTodosClientes(Paginacao paginacao) {
+        Pageable pageable = PageRequest.of(paginacao.page(), paginacao.size());
+        var page = clienteRepository.findAll(pageable);
+        return new Pagina<>(page.getContent().stream().map(ClienteMapper::toDTO).toList(), (int) page.getTotalElements());
+    }
+
+    @Override
     public ClienteDataDTO obterClientePorId(Long id) {
         ClienteEntity cliente = this.clienteRepository.findById(id).orElse(null);
         if (cliente == null) {
-            throw new ResourceNotFoundException("Cliente não encontrado");
+            return null;
         }
         return ClienteMapper.toDTO(cliente);
     }
@@ -43,7 +51,7 @@ public class DataRepository implements DataSource {
     public ClienteDataDTO obterClientePorEmail(String email) {
         ClienteEntity cliente = this.clienteRepository.findByEmail(email);
         if (cliente == null) {
-            throw new ResourceNotFoundException("Cliente não encontrado");
+            return null;
         }
         return ClienteMapper.toDTO(cliente);
     }
@@ -55,15 +63,28 @@ public class DataRepository implements DataSource {
     }
 
     @Override
+    public ClienteDataDTO atualizarCliente(ClienteDataDTO clienteDataDTO) {
+        ClienteEntity cliente = this.clienteRepository.save(ClienteMapper.toEntity(clienteDataDTO));
+        return ClienteMapper.toDTO(cliente);
+    }
+
+    @Override
     public void deletarCliente(Long id) {
         this.clienteRepository.deleteById(id);
+    }
+
+    @Override
+    public Pagina<GestorDataDTO> obterTodosGestores(Paginacao paginacao) {
+        Pageable pageable = PageRequest.of(paginacao.page(), paginacao.size());
+        var page = gestorRepository.findAll(pageable);
+        return new Pagina<>(page.getContent().stream().map(GestorMapper::toDTO).toList(), (int) page.getTotalElements());
     }
 
     @Override
     public GestorDataDTO obterGestorPorId(Long id) {
         GestorEntity gestor = this.gestorRepository.findById(id).orElse(null);
         if (gestor == null) {
-            throw new ResourceNotFoundException("Gestor não encontrado");
+            return null;
         }
         return GestorMapper.toDTO(gestor);
     }
@@ -72,7 +93,7 @@ public class DataRepository implements DataSource {
     public GestorDataDTO obterGestorPorEmail(String email) {
         GestorEntity gestor = this.gestorRepository.findByEmail(email);
         if (gestor == null) {
-            throw new ResourceNotFoundException("Gestor não encontrado");
+            return null;
         }
         return GestorMapper.toDTO(gestor);
     }
@@ -84,67 +105,94 @@ public class DataRepository implements DataSource {
     }
 
     @Override
+    public GestorDataDTO atualizarGestor(GestorDataDTO gestorDataDTO) {
+        GestorEntity gestor = this.gestorRepository.save(GestorMapper.toEntity(gestorDataDTO));
+        return GestorMapper.toDTO(gestor);
+    }
+
+    @Override
     public void deletarGestor(Long id) {
         this.gestorRepository.deleteById(id);
     }
 
     @Override
     public ItemCardapioDataDTO obterItemCardapioPorId(Long id) {
-        return null;
+        ItemCardapioEntity itemCardapio = this.itemCardapioRepository.findById(id).orElse(null);
+        if (itemCardapio == null) {
+            return null;
+        }
+        return ItemCardapioMapper.toDTO(itemCardapio);
     }
 
     @Override
-    public List<ItemCardapioDataDTO> obterTodosItensCardapio(int page, int size) {
-        return List.of();
+    public Pagina<ItemCardapioDataDTO> obterTodosItensCardapio(Paginacao paginacao) {
+        Pageable pageable = PageRequest.of(paginacao.page(), paginacao.size());
+        var page = itemCardapioRepository.findAll(pageable);
+        return new Pagina<>(page.getContent().stream().map(ItemCardapioMapper::toDTO).toList(), (int) page.getTotalElements());
     }
 
     @Override
     public ItemCardapioDataDTO incluirItemCardapio(NovoItemCardapioDTO novoItem) {
-        return null;
+        ItemCardapioEntity itemCardapio = this.itemCardapioRepository.save(ItemCardapioMapper.toEntity(novoItem));
+        return ItemCardapioMapper.toDTO(itemCardapio);
     }
 
     @Override
-    public ItemCardapioDataDTO atualizarItemCardapio(Long id, NovoItemCardapioDTO itemAtualizado) {
-        return null;
+    public ItemCardapioDataDTO atualizarItemCardapio(ItemCardapioDataDTO itemCardapioDataDTO) {
+        ItemCardapioEntity itemCardapio = this.itemCardapioRepository.save(ItemCardapioMapper.toEntity(itemCardapioDataDTO));
+        return ItemCardapioMapper.toDTO(itemCardapio);
     }
 
     @Override
     public void deletarItemCardapio(Long id) {
-
+        this.itemCardapioRepository.deleteById(id);
     }
 
     @Override
     public RestauranteDataDTO obterRestaurantePorId(Long id) {
-        return null;
+        RestauranteEntity restaurante = this.restauranteRepository.findById(id).orElse(null);
+        if (restaurante == null) {
+            return null;
+        }
+        return RestauranteMapper.toDTO(restaurante);
     }
 
     @Override
-    public List<RestauranteDataDTO> obterTodosRestaurantes(int page, int size) {
-        return List.of();
+    public Pagina<RestauranteDataDTO> obterTodosRestaurantes(Paginacao paginacao) {
+        Pageable pageable = PageRequest.of(paginacao.page(), paginacao.size());
+        var page = restauranteRepository.findAll(pageable);
+        return new Pagina<>(page.getContent().stream().map(RestauranteMapper::toDTO).toList(), (int) page.getTotalElements());
     }
 
     @Override
-    public RestauranteDataDTO incluirRestaurante(NovoRestauranteDTO novoRestaurante) {
-        return null;
+    public RestauranteDataDTO incluirRestaurante(NovoRestauranteComGestorDTO novoRestaurante) {
+        RestauranteEntity restaurante = this.restauranteRepository.save(RestauranteMapper.toEntity(novoRestaurante));
+        return RestauranteMapper.toDTO(restaurante);
     }
 
     @Override
-    public RestauranteDataDTO atualizarRestaurante(Long id, NovoRestauranteDTO restauranteAtualizado) {
-        return null;
+    public RestauranteDataDTO atualizarRestaurante(RestauranteDataDTO restauranteDataDTO) {
+        RestauranteEntity restaurante = this.restauranteRepository.save(RestauranteMapper.toEntity(restauranteDataDTO));
+        return RestauranteMapper.toDTO(restaurante);
     }
 
     @Override
     public void deletarRestaurante(Long id) {
-
+        this.restauranteRepository.deleteById(id);
     }
 
     @Override
     public LoginDataDTO obterLoginPorLogin(String login) {
-        return null;
+        LoginEntity loginEntity = this.loginRepository.findByLogin(login).orElse(null);
+        if (loginEntity == null) {
+            return null;
+        }
+        return LoginMapper.toDTO(loginEntity);
     }
 
     @Override
-    public void atualizarLogin(Long id, String novaSenha) {
-
+    public void atualizarSenha(LoginDTO loginDTO) {
+        LoginEntity loginEntity = LoginMapper.toEntity(loginDTO);
+        this.loginRepository.save(loginEntity);
     }
 }

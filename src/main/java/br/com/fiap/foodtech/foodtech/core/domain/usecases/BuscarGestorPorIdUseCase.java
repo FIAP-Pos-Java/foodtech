@@ -1,7 +1,7 @@
 package br.com.fiap.foodtech.foodtech.core.domain.usecases;
 
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Gestor;
-import br.com.fiap.foodtech.foodtech.core.exceptions.GestorNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.gestor.GestorNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.IGestorGateway;
 
 public class BuscarGestorPorIdUseCase {

@@ -17,6 +17,11 @@ public class Login {
         setSenha(senha);
     }
 
+    public Login(Long id, String login) {
+        setId(id);
+        setLogin(login);
+    }
+
     private void setId(Long id) {
         if (id != null && id <= 0) {
             throw new IllegalArgumentException("ID deve ser maior que zero");
@@ -50,14 +55,6 @@ public class Login {
         if (senha.length() < 4) {
             throw new IllegalArgumentException("Senha deve ter pelo menos 4 caracteres");
         }
-    }
-
-    public void alterarSenha(String novaSenha) {
-        validateSenha(novaSenha);
-        if (this.senha.equals(novaSenha)) {
-            throw new IllegalArgumentException("A nova senha deve ser diferente da senha atual");
-        }
-        this.senha = novaSenha;
     }
 
     public Long getId() {

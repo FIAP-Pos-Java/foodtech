@@ -1,7 +1,7 @@
 package br.com.fiap.foodtech.foodtech.core.domain.usecases;
 
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Cliente;
-import br.com.fiap.foodtech.foodtech.core.exceptions.ClienteNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.cliente.ClienteNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.IClienteGateway;
 
 public class BuscarClientePorIdUseCase {

@@ -1,6 +1,7 @@
 package br.com.fiap.foodtech.foodtech.core.gateways;
 
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Login;
+import br.com.fiap.foodtech.foodtech.core.dtos.LoginDTO;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 
 public class LoginGateway implements ILoginGateway {
@@ -24,15 +25,14 @@ public class LoginGateway implements ILoginGateway {
 
         return new Login(
                 loginData.id(),
-                loginData.login(),
-                loginData.senha()
+                loginData.login()
         );
     }
 
     @Override
-    public Login atualizar(Login login) {
-        dataSource.atualizarLogin(login.getId(), login.getSenha());
-        return login;
+    public void alterarSenha(Login login) {
+        LoginDTO loginDTO = new LoginDTO(login.getId(), login.getLogin(), login.getSenha());
+        dataSource.atualizarSenha(loginDTO);
     }
 
 }

@@ -56,6 +56,28 @@ public class RestauranteEntity {
         this.horarioFechamento = horarioFechamento;
         this.gestor = gestor;
         this.endereco = endereco;
+    }
+
+    public RestauranteEntity(
+            Long id,
+            String nome,
+            String tipoCozinha,
+            LocalTime horarioAbertura,
+            LocalTime horarioFechamento,
+            GestorEntity gestor, EnderecoEntity endereco) {
+        this.id = id;
+        this.nome = nome;
+        this.tipoCozinha = tipoCozinha;
+        this.horarioAbertura = horarioAbertura;
+        this.horarioFechamento = horarioFechamento;
+        this.gestor = gestor;
+        this.endereco = endereco;
+    }
+
+    @PrePersist
+    @PreUpdate
+    protected void onCreateOrUpdate() {
         this.dataUltimaAlteracao = LocalDateTime.now();
     }
+
 }

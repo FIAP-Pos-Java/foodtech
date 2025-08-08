@@ -6,29 +6,33 @@ import java.util.List;
 
 public interface DataSource {
 
+    Pagina<ClienteDataDTO> obterTodosClientes(Paginacao paginacao);
     ClienteDataDTO obterClientePorId(Long id);
     ClienteDataDTO obterClientePorEmail(String email);
-    ClienteDataDTO incluirCliente(NovoClienteDTO novoCliente);
+    ClienteDataDTO incluirCliente(NovoClienteDTO novoClienteDTO);
+    ClienteDataDTO atualizarCliente(ClienteDataDTO clienteDataDTO);
     void deletarCliente(Long id);
 
+    Pagina<GestorDataDTO> obterTodosGestores(Paginacao paginacao);
     GestorDataDTO obterGestorPorId(Long id);
     GestorDataDTO obterGestorPorEmail(String email);
     GestorDataDTO incluirGestor(NovoGestorDTO novoGestor);
+    GestorDataDTO atualizarGestor(GestorDataDTO gestorDataDTO);
     void deletarGestor(Long id);
 
     ItemCardapioDataDTO obterItemCardapioPorId(Long id);
-    List<ItemCardapioDataDTO> obterTodosItensCardapio(int page, int size);
+    Pagina<ItemCardapioDataDTO> obterTodosItensCardapio(Paginacao paginacao);
     ItemCardapioDataDTO incluirItemCardapio(NovoItemCardapioDTO novoItem);
-    ItemCardapioDataDTO atualizarItemCardapio(Long id, NovoItemCardapioDTO itemAtualizado);
+    ItemCardapioDataDTO atualizarItemCardapio(ItemCardapioDataDTO itemCardapioDataDTO);
     void deletarItemCardapio(Long id);
 
     RestauranteDataDTO obterRestaurantePorId(Long id);
-    List<RestauranteDataDTO> obterTodosRestaurantes(int page, int size);
-    RestauranteDataDTO incluirRestaurante(NovoRestauranteDTO novoRestaurante);
-    RestauranteDataDTO atualizarRestaurante(Long id, NovoRestauranteDTO restauranteAtualizado);
+    Pagina<RestauranteDataDTO> obterTodosRestaurantes(Paginacao paginacao);
+    RestauranteDataDTO incluirRestaurante(NovoRestauranteComGestorDTO novoRestaurante);
+    RestauranteDataDTO atualizarRestaurante(RestauranteDataDTO restauranteAtualizado);
     void deletarRestaurante(Long id);
 
     LoginDataDTO obterLoginPorLogin(String login);
-    void atualizarLogin(Long id, String novaSenha);
+    void atualizarSenha(LoginDTO loginDTO);
 
 }

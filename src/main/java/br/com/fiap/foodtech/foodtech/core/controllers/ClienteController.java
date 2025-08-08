@@ -1,21 +1,13 @@
 package br.com.fiap.foodtech.foodtech.core.controllers;
 
-import br.com.fiap.foodtech.foodtech.core.domain.usecases.AlterarSenhaUseCase;
-import br.com.fiap.foodtech.foodtech.core.domain.usecases.AutenticarUsuarioUseCase;
-import br.com.fiap.foodtech.foodtech.core.domain.usecases.BuscarClientePorIdUseCase;
-import br.com.fiap.foodtech.foodtech.core.domain.usecases.CadastrarClienteUseCase;
-import br.com.fiap.foodtech.foodtech.core.dtos.AlterarSenhaDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.ClienteDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.LoginDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.NovoClienteDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.ClienteJaExistenteException;
-import br.com.fiap.foodtech.foodtech.core.exceptions.ClienteNaoEncontradoException;
-import br.com.fiap.foodtech.foodtech.core.exceptions.CredenciaisInvalidasException;
-import br.com.fiap.foodtech.foodtech.core.exceptions.LoginInvalidoException;
+import br.com.fiap.foodtech.foodtech.core.domain.usecases.*;
+import br.com.fiap.foodtech.foodtech.core.dtos.*;
 import br.com.fiap.foodtech.foodtech.core.gateways.ClienteGateway;
-import br.com.fiap.foodtech.foodtech.core.gateways.LoginGateway;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 import br.com.fiap.foodtech.foodtech.core.presenters.ClientePresenter;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ClienteController {
 
@@ -29,48 +21,43 @@ public class ClienteController {
         return new ClienteController(dataSource);
     }
 
-    public ClienteDTO cadastrar(NovoClienteDTO novoClienteDTO) {
-        var clienteGateway = ClienteGateway.create(this.dataSource);
-        var useCase = CadastrarClienteUseCase.create(clienteGateway);
+    public Pagina<ClienteDTO> buscarTodosClientes(Paginacao paginacao) {
+        var clienteGateway = new ClienteGateway(this.dataSource);
+        var useCase = new ListarClientesUseCase(clienteGateway);
 
-        try {
-            var cliente = useCase.run(novoClienteDTO);
-            return ClientePresenter.toDTO(cliente);
-        } catch (ClienteJaExistenteException e) {
-            throw e;
-        }
+        var paginaCliente = useCase.run(paginacao);
+        return new Pagina<>(paginaCliente.content().stream().map(ClientePresenter::toDTO).toList(), paginaCliente.totalElements());
     }
 
     public ClienteDTO buscarPorId(Long id) {
         var clienteGateway = new ClienteGateway(this.dataSource);
         var useCase = new BuscarClientePorIdUseCase(clienteGateway);
+
         var cliente = useCase.run(id);
-        if (cliente == null) {
-            return null;
-        }
         return ClientePresenter.toDTO(cliente);
     }
 
-    public boolean autenticar(LoginDTO loginDTO) {
-        var loginGateway = LoginGateway.create(this.dataSource);
-        var useCase = AutenticarUsuarioUseCase.create(loginGateway);
+    public ClienteDTO cadastrar(NovoClienteDTO novoClienteDTO) {
+        var clienteGateway = ClienteGateway.create(this.dataSource);
+        var useCase = CadastrarClienteUseCase.create(clienteGateway);
 
-        try {
-            return useCase.run(loginDTO);
-        } catch (LoginInvalidoException | CredenciaisInvalidasException e) {
-            throw e;
-        }
+        var cliente = useCase.run(novoClienteDTO);
+        return ClientePresenter.toDTO(cliente);
     }
 
-    public void alterarSenha(AlterarSenhaDTO alterarSenhaDTO) {
-        var loginGateway = LoginGateway.create(this.dataSource);
-        var useCase = AlterarSenhaUseCase.create(loginGateway);
+    public ClienteDTO atualizar(Long id, ClienteDataDTO clienteDataDTO) {
+        var clienteGateway = new ClienteGateway(this.dataSource);
+        var useCase = AtualizarClienteUseCase.create(clienteGateway);
 
-        try {
-            useCase.run(alterarSenhaDTO);
-        } catch (LoginInvalidoException | CredenciaisInvalidasException e) {
-            throw e;
-        }
+        var cliente = useCase.run(id, clienteDataDTO);
+        return ClientePresenter.toDTO(cliente);
+    }
+
+    public void deletar(Long id) {
+        var clienteGateway = new ClienteGateway(this.dataSource);
+        var useCase = DeletarClienteUseCase.create(clienteGateway);
+
+        useCase.run(id);
     }
 
 }

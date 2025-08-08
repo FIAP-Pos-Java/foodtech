@@ -1,9 +1,6 @@
 package br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers;
 
-import br.com.fiap.foodtech.foodtech.core.dtos.ClienteDataDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.EnderecoDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.LoginDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.NovoClienteDTO;
+import br.com.fiap.foodtech.foodtech.core.dtos.*;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.ClienteEntity;
 
 public abstract class ClienteMapper {
@@ -15,7 +12,7 @@ public abstract class ClienteMapper {
                 entity.getEmail(),
                 entity.getTipoUsuario(),
                 LoginMapper.toDTO(entity.getLogin()),
-                EnderecoMapper.toDTO(entity.getEndereco())
+                EnderecoMapper.toDataDTO(entity.getEndereco())
         );
     }
 
@@ -24,8 +21,46 @@ public abstract class ClienteMapper {
                 dto.nome(),
                 dto.email(),
                 dto.tipoUsuario(),
-                LoginMapper.toEntity(new LoginDTO(dto.login(), dto.senha())),
-                EnderecoMapper.toEntity(new EnderecoDTO(dto.logradouro(), dto.numero(), dto.bairro(), dto.cidade(), dto.estado(), dto.cep()))
+                LoginMapper.toEntity(
+                        new NovoLoginDTO(
+                                dto.login().login(),
+                                dto.login().senha())
+                ),
+                EnderecoMapper.toEntity(
+                        new NovoEnderecoDTO(
+                                dto.endereco().logradouro(),
+                                dto.endereco().numero(),
+                                dto.endereco().bairro(),
+                                dto.endereco().cidade(),
+                                dto.endereco().estado(),
+                                dto.endereco().cep()
+                        )
+                )
+        );
+    }
+
+    public static ClienteEntity toEntity(ClienteDataDTO dto) {
+        return new ClienteEntity(
+                dto.id(),
+                dto.nome(),
+                dto.email(),
+                dto.tipoUsuario(),
+                LoginMapper.toEntity(
+                        new LoginDataDTO(
+                                dto.login().id(),
+                                dto.login().login())
+                ),
+                EnderecoMapper.toEntity(
+                        new EnderecoDataDTO(
+                                dto.endereco().id(),
+                                dto.endereco().logradouro(),
+                                dto.endereco().numero(),
+                                dto.endereco().bairro(),
+                                dto.endereco().cidade(),
+                                dto.endereco().estado(),
+                                dto.endereco().cep()
+                        )
+                )
         );
     }
 }

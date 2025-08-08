@@ -4,9 +4,8 @@ import br.com.fiap.foodtech.foodtech.core.domain.entities.Endereco;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Login;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Restaurante;
-import br.com.fiap.foodtech.foodtech.core.dtos.NovoRestauranteDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.RestauranteDataDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.RestauranteNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.dtos.*;
+import br.com.fiap.foodtech.foodtech.core.exceptions.restaurante.RestauranteNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 
 import java.util.List;
@@ -28,34 +27,53 @@ public class RestauranteGateway implements IRestauranteGateway {
     public Restaurante buscarPorId(Long id) {
         var restauranteData = dataSource.obterRestaurantePorId(id);
         if (restauranteData == null) {
-            throw new RestauranteNaoEncontradoException("Restaurante com ID " + id + " não encontrado");
+            return null;
         }
 
         return mapToRestaurante(restauranteData);
     }
 
     @Override
-    public List<Restaurante> buscarTodos(int page, int size) {
-        var restaurantesData = dataSource.obterTodosRestaurantes(page, size);
-        return restaurantesData.stream()
-                .map(this::mapToRestaurante)
-                .collect(Collectors.toList());
+    public Pagina<Restaurante> buscarTodos(Paginacao paginacao) {
+        var paginaRestaurante = dataSource.obterTodosRestaurantes(paginacao);
+        return new Pagina<>(paginaRestaurante.content().stream().map(restauranteDTO -> mapToRestaurante(restauranteDTO)).toList(),
+                paginaRestaurante.totalElements());
     }
 
     @Override
     public Restaurante incluir(Restaurante restaurante) {
-        NovoRestauranteDTO novoRestauranteDTO = new NovoRestauranteDTO(
+        NovoRestauranteComGestorDTO novoRestauranteDTO = new NovoRestauranteComGestorDTO(
                 restaurante.getNome(),
                 restaurante.getTipoCozinha(),
                 restaurante.getHorarioAbertura(),
                 restaurante.getHorarioFechamento(),
-                restaurante.getGestor().getId(),
-                restaurante.getEndereco().getLogradouro(),
-                restaurante.getEndereco().getNumero(),
-                restaurante.getEndereco().getBairro(),
-                restaurante.getEndereco().getCidade(),
-                restaurante.getEndereco().getEstado(),
-                restaurante.getEndereco().getCep()
+                new GestorDataDTO(
+                        restaurante.getGestor().getId(),
+                        restaurante.getGestor().getNome(),
+                        restaurante.getGestor().getEmail(),
+                        restaurante.getGestor().getTipoUsuario(),
+                        new LoginDataDTO(
+                                restaurante.getGestor().getLogin().getId(),
+                                restaurante.getGestor().getLogin().getLogin()
+                        ),
+                        new EnderecoDataDTO(
+                                restaurante.getGestor().getEndereco().getId(),
+                                restaurante.getGestor().getEndereco().getLogradouro(),
+                                restaurante.getGestor().getEndereco().getNumero(),
+                                restaurante.getGestor().getEndereco().getBairro(),
+                                restaurante.getGestor().getEndereco().getCidade(),
+                                restaurante.getGestor().getEndereco().getEstado(),
+                                restaurante.getGestor().getEndereco().getCep()
+                        )
+                ),
+                new NovoEnderecoDTO(
+                        restaurante.getEndereco().getLogradouro(),
+                        restaurante.getEndereco().getNumero(),
+                        restaurante.getEndereco().getBairro(),
+                        restaurante.getEndereco().getCidade(),
+                        restaurante.getEndereco().getEstado(),
+                        restaurante.getEndereco().getCep()
+                )
         );
 
         var restauranteSalvo = dataSource.incluirRestaurante(novoRestauranteDTO);
@@ -64,12 +82,33 @@ public class RestauranteGateway implements IRestauranteGateway {
 
     @Override
     public Restaurante atualizar(Restaurante restaurante) {
-        NovoRestauranteDTO restauranteAtualizadoDTO = new NovoRestauranteDTO(
-                restaurante.getNome(),
-                restaurante.getTipoCozinha(),
-                restaurante.getHorarioAbertura(),
-                restaurante.getHorarioFechamento(),
+
+        LoginDataDTO loginGestorDTO = new LoginDataDTO(
+                restaurante.getGestor().getLogin().getId(),
+                restaurante.getGestor().getLogin().getLogin()
+        );
+
+        EnderecoDataDTO enderecoGestorDTO = new EnderecoDataDTO(
+                restaurante.getGestor().getEndereco().getId(),
+                restaurante.getGestor().getEndereco().getLogradouro(),
+                restaurante.getGestor().getEndereco().getNumero(),
+                restaurante.getGestor().getEndereco().getBairro(),
+                restaurante.getGestor().getEndereco().getCidade(),
+                restaurante.getGestor().getEndereco().getEstado(),
+                restaurante.getGestor().getEndereco().getCep()
+        );
+
+        GestorDataDTO gestorDTO = new GestorDataDTO(
                 restaurante.getGestor().getId(),
+                restaurante.getGestor().getNome(),
+                restaurante.getGestor().getEmail(),
+                restaurante.getGestor().getTipoUsuario(),
+                loginGestorDTO,
+                enderecoGestorDTO
+        );
+
+        EnderecoDataDTO enderecoRestauranteDTO = new EnderecoDataDTO(
+                restaurante.getEndereco().getId(),
                 restaurante.getEndereco().getLogradouro(),
                 restaurante.getEndereco().getNumero(),
                 restaurante.getEndereco().getBairro(),
@@ -78,7 +117,17 @@ public class RestauranteGateway implements IRestauranteGateway {
                 restaurante.getEndereco().getCep()
         );
 
-        var restauranteAtualizado = dataSource.atualizarRestaurante(restaurante.getId(), restauranteAtualizadoDTO);
+        RestauranteDataDTO restauranteDataDTO = new RestauranteDataDTO(
+                restaurante.getId(),
+                restaurante.getNome(),
+                restaurante.getTipoCozinha(),
+                restaurante.getHorarioAbertura(),
+                restaurante.getHorarioFechamento(),
+                gestorDTO,
+                enderecoRestauranteDTO
+        );
+
+        var restauranteAtualizado = dataSource.atualizarRestaurante(restauranteDataDTO);
         return mapToRestaurante(restauranteAtualizado);
     }
 
@@ -90,40 +139,36 @@ public class RestauranteGateway implements IRestauranteGateway {
     private Restaurante mapToRestaurante(RestauranteDataDTO restauranteData) {
 
         Login loginGestor = new Login(
-                restauranteData.gestorData().loginData().login(),
-                restauranteData.gestorData().loginData().senha()
+                restauranteData.gestor().login().id(),
+                restauranteData.gestor().login().login()
         );
-
 
         Endereco enderecoGestor = new Endereco(
-                restauranteData.gestorData().enderecoData().logradouro(),
-                restauranteData.gestorData().enderecoData().numero(),
-                restauranteData.gestorData().enderecoData().bairro(),
-                restauranteData.gestorData().enderecoData().cidade(),
-                restauranteData.gestorData().enderecoData().estado(),
-                restauranteData.gestorData().enderecoData().cep()
+                restauranteData.gestor().endereco().logradouro(),
+                restauranteData.gestor().endereco().numero(),
+                restauranteData.gestor().endereco().bairro(),
+                restauranteData.gestor().endereco().cidade(),
+                restauranteData.gestor().endereco().estado(),
+                restauranteData.gestor().endereco().cep()
         );
 
-
         Gestor gestor = new Gestor(
-                restauranteData.gestorData().id(),
-                restauranteData.gestorData().nome(),
-                restauranteData.gestorData().email(),
-                restauranteData.gestorData().tipoUsuario(),
+                restauranteData.gestor().id(),
+                restauranteData.gestor().nome(),
+                restauranteData.gestor().email(),
+                restauranteData.gestor().tipoUsuario(),
                 enderecoGestor,
                 loginGestor
         );
 
-
         Endereco endereco = new Endereco(
-                restauranteData.enderecoData().logradouro(),
-                restauranteData.enderecoData().numero(),
-                restauranteData.enderecoData().bairro(),
-                restauranteData.enderecoData().cidade(),
-                restauranteData.enderecoData().estado(),
-                restauranteData.enderecoData().cep()
+                restauranteData.endereco().logradouro(),
+                restauranteData.endereco().numero(),
+                restauranteData.endereco().bairro(),
+                restauranteData.endereco().cidade(),
+                restauranteData.endereco().estado(),
+                restauranteData.endereco().cep()
         );
-
 
         return new Restaurante(
                 restauranteData.id(),
@@ -135,5 +180,4 @@ public class RestauranteGateway implements IRestauranteGateway {
                 gestor
         );
     }
-
 }

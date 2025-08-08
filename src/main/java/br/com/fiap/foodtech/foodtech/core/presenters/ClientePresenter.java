@@ -2,6 +2,7 @@ package br.com.fiap.foodtech.foodtech.core.presenters;
 
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.core.dtos.ClienteDTO;
+import br.com.fiap.foodtech.foodtech.core.dtos.EnderecoDTO;
 
 public class ClientePresenter {
 
@@ -13,7 +14,8 @@ public class ClientePresenter {
                 cliente.getNome(),
                 cliente.getEmail(),
                 cliente.getTipoUsuario(),
-                loginOfuscado
+                loginOfuscado,
+                new EnderecoDTO(cliente.getEndereco().getBairro(), cliente.getEndereco().getCidade(), cliente.getEndereco().getEstado())
         );
     }
 

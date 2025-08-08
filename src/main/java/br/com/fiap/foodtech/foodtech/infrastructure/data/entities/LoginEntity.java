@@ -34,4 +34,16 @@ public class LoginEntity {
         this.login = login;
         this.senha = senha;
     }
+
+    public LoginEntity(Long id, String login) {
+        this.id = id;
+        this.login = login;
+    }
+
+    @PrePersist
+    @PreUpdate
+    protected void onCreateOrUpdate() {
+        this.dataUltimaAlteracao = LocalDateTime.now();
+    }
+
 }

@@ -44,7 +44,7 @@ public class Gestor {
     }
 
     private void setTipoUsuario(String tipoUsuario) {
-        if (!"DONODERESTAURANTE".equals(tipoUsuario)) {
+        if (!"GESTOR".equals(tipoUsuario)) {
             throw new IllegalArgumentException("Tipo de usuário inválido para Gestor");
         }
         this.tipoUsuario = tipoUsuario;

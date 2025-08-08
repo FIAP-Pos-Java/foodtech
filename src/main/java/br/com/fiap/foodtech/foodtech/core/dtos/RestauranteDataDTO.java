@@ -8,6 +8,6 @@ public record RestauranteDataDTO(
         String tipoCozinha,
         LocalTime horarioAbertura,
         LocalTime horarioFechamento,
-        GestorDataDTO gestorData,
-        EnderecoDataDTO enderecoData
+        GestorDataDTO gestor,
+        EnderecoDataDTO endereco
 ) { }

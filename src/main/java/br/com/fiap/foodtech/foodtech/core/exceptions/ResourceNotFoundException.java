@@ -1,4 +1,4 @@
-package br.com.fiap.foodtech.foodtech.infrastructure.data.exceptions;
+package br.com.fiap.foodtech.foodtech.core.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
 

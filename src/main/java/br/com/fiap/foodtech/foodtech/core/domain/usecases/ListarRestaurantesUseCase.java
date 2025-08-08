@@ -1,9 +1,9 @@
 package br.com.fiap.foodtech.foodtech.core.domain.usecases;
 
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Restaurante;
+import br.com.fiap.foodtech.foodtech.core.dtos.Pagina;
+import br.com.fiap.foodtech.foodtech.core.dtos.Paginacao;
 import br.com.fiap.foodtech.foodtech.core.gateways.IRestauranteGateway;
-
-import java.util.List;
 
 public class ListarRestaurantesUseCase {
 
@@ -17,8 +17,8 @@ public class ListarRestaurantesUseCase {
         return new ListarRestaurantesUseCase(restauranteGateway);
     }
 
-    public List<Restaurante> run(int page, int size) {
-        return restauranteGateway.buscarTodos(page, size);
+    public Pagina<Restaurante> run(Paginacao paginacao) {
+        return restauranteGateway.buscarTodos(paginacao);
     }
 
 }

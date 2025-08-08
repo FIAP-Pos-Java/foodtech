@@ -4,7 +4,7 @@ import br.com.fiap.foodtech.foodtech.core.domain.entities.Endereco;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Restaurante;
 import br.com.fiap.foodtech.foodtech.core.dtos.NovoRestauranteDTO;
-import br.com.fiap.foodtech.foodtech.core.exceptions.GestorNaoEncontradoException;
+import br.com.fiap.foodtech.foodtech.core.exceptions.gestor.GestorNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.IGestorGateway;
 import br.com.fiap.foodtech.foodtech.core.gateways.IRestauranteGateway;
 
@@ -30,12 +30,12 @@ public class CadastrarRestauranteUseCase {
         }
 
         Endereco endereco = new Endereco(
-                novoRestauranteDTO.logradouro(),
-                novoRestauranteDTO.numero(),
-                novoRestauranteDTO.bairro(),
-                novoRestauranteDTO.cidade(),
-                novoRestauranteDTO.estado(),
-                novoRestauranteDTO.cep()
+                novoRestauranteDTO.endereco().logradouro(),
+                novoRestauranteDTO.endereco().numero(),
+                novoRestauranteDTO.endereco().bairro(),
+                novoRestauranteDTO.endereco().cidade(),
+                novoRestauranteDTO.endereco().estado(),
+                novoRestauranteDTO.endereco().cep()
         );
 
         Restaurante novoRestaurante = new Restaurante(
