@@ -1,3 +1,8 @@
+# Diretórios de build
+target/
+bin/
+build/
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -8,4 +13,6 @@
 .mvn/
 !**/src/main/**/.mvn/wrapper/maven-wrapper.jar
 
-.target/
+# Outros arquivos comuns
+*.class
+*.log
