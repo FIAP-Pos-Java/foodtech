@@ -1,6 +1,7 @@
 package br.com.fiap.foodtech.foodtech.core.presenters;
 
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Gestor;
+import br.com.fiap.foodtech.foodtech.core.dtos.EnderecoDTO;
 import br.com.fiap.foodtech.foodtech.core.dtos.GestorDTO;
 
 public class GestorPresenter {
@@ -14,7 +15,8 @@ public class GestorPresenter {
                 gestor.getNome(),
                 gestor.getEmail(),
                 gestor.getTipoUsuario(),
-                loginOfuscado
+                loginOfuscado,
+                new EnderecoDTO(gestor.getEndereco().getBairro(), gestor.getEndereco().getCidade(), gestor.getEndereco().getEstado())
         );
     }
 

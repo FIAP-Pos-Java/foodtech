@@ -1,18 +1,13 @@
 package br.com.fiap.foodtech.foodtech.infrastructure.controllers;
 
-import br.com.fiap.foodtech.foodtech.core.controllers.ClienteController;
 import br.com.fiap.foodtech.foodtech.core.controllers.GestorController;
-import br.com.fiap.foodtech.foodtech.core.dtos.GestorDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.GestorDataDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.NovoGestorDTO;
+import br.com.fiap.foodtech.foodtech.core.dtos.*;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.GestorEntity;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.repositories.DataRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,7 +22,7 @@ public class GestorResource {
     @Autowired
     DataRepository dataRepository;
 
-    /*@Operation(
+    @Operation(
             description = "Buscar todos os gestores paginados",
             summary = "Buscar gestores",
             responses = {
@@ -35,14 +30,14 @@ public class GestorResource {
             }
     )
     @GetMapping
-    public ResponseEntity<List<GestorEntity>> findAllGestors(
+    public ResponseEntity<Pagina<GestorDTO>> buscarTodosGestores(
             @RequestParam("page") int page,
             @RequestParam("size") int size
     ) {
-        logger.info("GET /gestores");
-        var gestores = this.gestorService.findAllGestors(page, size);
-        return new ResponseEntity<>(gestores.getContent(), HttpStatus.OK);
-    }*/
+        GestorController gestorController = GestorController.create(dataRepository);
+        Paginacao paginacao = new Paginacao(page, size);
+        return new ResponseEntity<>(gestorController.buscarTodosGestores(paginacao), HttpStatus.OK);
+    }
 
     @Operation(
             description = "Buscar um gestor por ID",

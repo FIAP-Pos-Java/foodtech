@@ -29,17 +29,17 @@ public class AtualizarGestorUseCase {
 
         Login login = new Login(
                 gestorExistente.getLogin().getId(),
-                gestorDataDTO.loginData().login()
+                gestorDataDTO.login().login()
         );
 
         Endereco endereco = new Endereco(
                 gestorExistente.getEndereco().getId(),
-                gestorDataDTO.enderecoData().logradouro(),
-                gestorDataDTO.enderecoData().numero(),
-                gestorDataDTO.enderecoData().bairro(),
-                gestorDataDTO.enderecoData().cidade(),
-                gestorDataDTO.enderecoData().estado(),
-                gestorDataDTO.enderecoData().cep()
+                gestorDataDTO.endereco().logradouro(),
+                gestorDataDTO.endereco().numero(),
+                gestorDataDTO.endereco().bairro(),
+                gestorDataDTO.endereco().cidade(),
+                gestorDataDTO.endereco().estado(),
+                gestorDataDTO.endereco().cep()
         );
 
         Gestor gestorAtualizado = new Gestor(

@@ -27,17 +27,17 @@ public class CadastrarGestorUseCase {
         }
 
         Login login = new Login(
-                novoGestorDTO.novoLogin().login(),
-                novoGestorDTO.novoLogin().senha()
+                novoGestorDTO.login().login(),
+                novoGestorDTO.login().senha()
         );
 
         Endereco endereco = new Endereco(
-                novoGestorDTO.novoEndereco().logradouro(),
-                novoGestorDTO.novoEndereco().numero(),
-                novoGestorDTO.novoEndereco().bairro(),
-                novoGestorDTO.novoEndereco().cidade(),
-                novoGestorDTO.novoEndereco().estado(),
-                novoGestorDTO.novoEndereco().cep()
+                novoGestorDTO.endereco().logradouro(),
+                novoGestorDTO.endereco().numero(),
+                novoGestorDTO.endereco().bairro(),
+                novoGestorDTO.endereco().cidade(),
+                novoGestorDTO.endereco().estado(),
+                novoGestorDTO.endereco().cep()
         );
 
         Gestor novoGestor = new Gestor(

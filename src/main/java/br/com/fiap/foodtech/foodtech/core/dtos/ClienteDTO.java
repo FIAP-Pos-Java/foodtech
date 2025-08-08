@@ -6,5 +6,5 @@ public record ClienteDTO(
         String email,
         String tipoUsuario,
         String loginOfuscado,
-        EnderecoDTO enderecoDTO
+        EnderecoDTO endereco
 ) { }

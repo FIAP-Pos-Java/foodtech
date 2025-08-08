@@ -5,5 +5,6 @@ public record GestorDTO(
         String nome,
         String email,
         String tipoUsuario,
-        String loginOfuscado
+        String loginOfuscado,
+        EnderecoDTO endereco
 ) { }

@@ -13,6 +13,7 @@ public interface DataSource {
     ClienteDataDTO atualizarCliente(ClienteDataDTO clienteDataDTO);
     void deletarCliente(Long id);
 
+    Pagina<GestorDataDTO> obterTodosGestores(Paginacao paginacao);
     GestorDataDTO obterGestorPorId(Long id);
     GestorDataDTO obterGestorPorEmail(String email);
     GestorDataDTO incluirGestor(NovoGestorDTO novoGestor);

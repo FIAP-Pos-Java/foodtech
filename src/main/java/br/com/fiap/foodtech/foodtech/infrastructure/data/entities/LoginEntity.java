@@ -39,4 +39,11 @@ public class LoginEntity {
         this.id = id;
         this.login = login;
     }
+
+    @PrePersist
+    @PreUpdate
+    protected void onCreateOrUpdate() {
+        this.dataUltimaAlteracao = LocalDateTime.now();
+    }
+
 }

@@ -78,6 +78,13 @@ public class DataRepository implements DataSource {
     }
 
     @Override
+    public Pagina<GestorDataDTO> obterTodosGestores(Paginacao paginacao) {
+        Pageable pageable = PageRequest.of(paginacao.page(), paginacao.size());
+        var page = gestorRepository.findAll(pageable);
+        return new Pagina<>(page.getContent().stream().map(GestorMapper::toDTO).toList(), (int) page.getTotalElements());
+    }
+
+    @Override
     public GestorDataDTO obterGestorPorId(Long id) {
         GestorEntity gestor = this.gestorRepository.findById(id).orElse(null);
         if (gestor == null) {

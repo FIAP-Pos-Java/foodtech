@@ -1,6 +1,5 @@
 package br.com.fiap.foodtech.foodtech.core.gateways;
 
-import br.com.fiap.foodtech.foodtech.core.domain.entities.Cliente;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Endereco;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Gestor;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.Login;
@@ -18,6 +17,12 @@ public class GestorGateway implements IGestorGateway {
 
     public static GestorGateway create(DataSource dataStorageSource) {
         return new GestorGateway(dataStorageSource);
+    }
+
+    @Override
+    public Pagina<Gestor> buscarTodos(Paginacao paginacao) {
+        var paginaGestor = dataSource.obterTodosGestores(paginacao);
+        return new Pagina<>(paginaGestor.content().stream().map(gestorDTO -> dtoToGestor(gestorDTO)).toList(), paginaGestor.totalElements());
     }
 
     @Override
@@ -92,15 +97,15 @@ public class GestorGateway implements IGestorGateway {
     }
 
     private Gestor dtoToGestor(GestorDataDTO gestorSalvo) {
-        Login login = new Login(gestorSalvo.loginData().id(), gestorSalvo.loginData().login());
+        Login login = new Login(gestorSalvo.login().id(), gestorSalvo.login().login());
 
         Endereco endereco = new Endereco(
-                gestorSalvo.enderecoData().logradouro(),
-                gestorSalvo.enderecoData().numero(),
-                gestorSalvo.enderecoData().bairro(),
-                gestorSalvo.enderecoData().cidade(),
-                gestorSalvo.enderecoData().estado(),
-                gestorSalvo.enderecoData().cep()
+                gestorSalvo.endereco().logradouro(),
+                gestorSalvo.endereco().numero(),
+                gestorSalvo.endereco().bairro(),
+                gestorSalvo.endereco().cidade(),
+                gestorSalvo.endereco().estado(),
+                gestorSalvo.endereco().cep()
         );
 
         return new Gestor(

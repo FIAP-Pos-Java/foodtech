@@ -5,6 +5,6 @@ public record GestorDataDTO(
         String nome,
         String email,
         String tipoUsuario,
-        LoginDataDTO loginData,
-        EnderecoDataDTO enderecoData
+        LoginDataDTO login,
+        EnderecoDataDTO endereco
 ) { }
