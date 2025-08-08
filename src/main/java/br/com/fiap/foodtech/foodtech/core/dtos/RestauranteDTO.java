@@ -8,7 +8,7 @@ public record RestauranteDTO(
         String tipoCozinha,
         LocalTime horarioAbertura,
         LocalTime horarioFechamento,
+        EnderecoDTO endereco,
         Long idGestor,
-        String nomeGestor,
-        EnderecoDTO endereco
+        String nomeGestor
 ) { }

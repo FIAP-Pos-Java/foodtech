@@ -7,14 +7,6 @@ import br.com.fiap.foodtech.foodtech.core.dtos.RestauranteDTO;
 public class RestaurantePresenter {
 
     public static RestauranteDTO toDTO(Restaurante restaurante) {
-        /*EnderecoDTO enderecoDTO = new EnderecoDTO(
-                restaurante.getEndereco().getLogradouro(),
-                restaurante.getEndereco().getNumero(),
-                restaurante.getEndereco().getBairro(),
-                restaurante.getEndereco().getCidade(),
-                restaurante.getEndereco().getEstado(),
-                restaurante.getEndereco().getCep()
-        );
 
         return new RestauranteDTO(
                 restaurante.getId(),
@@ -22,11 +14,13 @@ public class RestaurantePresenter {
                 restaurante.getTipoCozinha(),
                 restaurante.getHorarioAbertura(),
                 restaurante.getHorarioFechamento(),
+                new EnderecoDTO(
+                        restaurante.getEndereco().getBairro(),
+                        restaurante.getEndereco().getCidade(),
+                        restaurante.getEndereco().getEstado()
+                ),
                 restaurante.getGestor().getId(),
-                restaurante.getGestor().getNome(),
-                enderecoDTO
-        );*/
-        return null;
+                restaurante.getGestor().getNome()
+        );
     }
-
 }

@@ -7,7 +7,15 @@ import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.EnderecoEntity
 
 public abstract class EnderecoMapper {
 
-    protected static EnderecoDataDTO toDTO(EnderecoEntity endereco) {
+    protected static EnderecoDTO toDTO(EnderecoEntity endereco) {
+        return new EnderecoDTO(
+                endereco.getBairro(),
+                endereco.getCidade(),
+                endereco.getEstado()
+        );
+    }
+
+    protected static EnderecoDataDTO toDataDTO(EnderecoEntity endereco) {
         return new EnderecoDataDTO(
                 endereco.getId(),
                 endereco.getLogradouro(),

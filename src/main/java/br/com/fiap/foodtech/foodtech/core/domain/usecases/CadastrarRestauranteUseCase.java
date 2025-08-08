@@ -30,12 +30,12 @@ public class CadastrarRestauranteUseCase {
         }
 
         Endereco endereco = new Endereco(
-                novoRestauranteDTO.logradouro(),
-                novoRestauranteDTO.numero(),
-                novoRestauranteDTO.bairro(),
-                novoRestauranteDTO.cidade(),
-                novoRestauranteDTO.estado(),
-                novoRestauranteDTO.cep()
+                novoRestauranteDTO.endereco().logradouro(),
+                novoRestauranteDTO.endereco().numero(),
+                novoRestauranteDTO.endereco().bairro(),
+                novoRestauranteDTO.endereco().cidade(),
+                novoRestauranteDTO.endereco().estado(),
+                novoRestauranteDTO.endereco().cep()
         );
 
         Restaurante novoRestaurante = new Restaurante(

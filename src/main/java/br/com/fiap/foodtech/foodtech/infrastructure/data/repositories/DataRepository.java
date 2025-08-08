@@ -5,9 +5,11 @@ import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.ClienteMapper;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.GestorMapper;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.LoginMapper;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.RestauranteMapper;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.ClienteEntity;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.GestorEntity;
 import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.LoginEntity;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.RestauranteEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -146,27 +148,35 @@ public class DataRepository implements DataSource {
 
     @Override
     public RestauranteDataDTO obterRestaurantePorId(Long id) {
-        return null;
+        RestauranteEntity restaurante = this.restauranteRepository.findById(id).orElse(null);
+        if (restaurante == null) {
+            return null;
+        }
+        return RestauranteMapper.toDTO(restaurante);
     }
 
     @Override
-    public List<RestauranteDataDTO> obterTodosRestaurantes(int page, int size) {
-        return List.of();
+    public Pagina<RestauranteDataDTO> obterTodosRestaurantes(Paginacao paginacao) {
+        Pageable pageable = PageRequest.of(paginacao.page(), paginacao.size());
+        var page = restauranteRepository.findAll(pageable);
+        return new Pagina<>(page.getContent().stream().map(RestauranteMapper::toDTO).toList(), (int) page.getTotalElements());
     }
 
     @Override
-    public RestauranteDataDTO incluirRestaurante(NovoRestauranteDTO novoRestaurante) {
-        return null;
+    public RestauranteDataDTO incluirRestaurante(NovoRestauranteComGestorDTO novoRestaurante) {
+        RestauranteEntity restaurante = this.restauranteRepository.save(RestauranteMapper.toEntity(novoRestaurante));
+        return RestauranteMapper.toDTO(restaurante);
     }
 
     @Override
-    public RestauranteDataDTO atualizarRestaurante(Long id, NovoRestauranteDTO restauranteAtualizado) {
-        return null;
+    public RestauranteDataDTO atualizarRestaurante(RestauranteDataDTO restauranteDataDTO) {
+        RestauranteEntity restaurante = this.restauranteRepository.save(RestauranteMapper.toEntity(restauranteDataDTO));
+        return RestauranteMapper.toDTO(restaurante);
     }
 
     @Override
     public void deletarRestaurante(Long id) {
-
+        this.restauranteRepository.deleteById(id);
     }
 
     @Override

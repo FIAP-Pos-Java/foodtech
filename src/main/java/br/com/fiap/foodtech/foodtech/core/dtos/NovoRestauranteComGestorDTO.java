@@ -2,12 +2,11 @@ package br.com.fiap.foodtech.foodtech.core.dtos;
 
 import java.time.LocalTime;
 
-public record RestauranteDataDTO(
-        Long id,
+public record NovoRestauranteComGestorDTO(
         String nome,
         String tipoCozinha,
         LocalTime horarioAbertura,
         LocalTime horarioFechamento,
         GestorDataDTO gestor,
-        EnderecoDataDTO endereco
+        NovoEnderecoDTO endereco
 ) { }

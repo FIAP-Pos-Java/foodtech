@@ -8,10 +8,5 @@ public record NovoRestauranteDTO(
         LocalTime horarioAbertura,
         LocalTime horarioFechamento,
         Long idGestor,
-        String logradouro,
-        String numero,
-        String bairro,
-        String cidade,
-        String estado,
-        String cep
+        NovoEnderecoDTO endereco
 ) { }

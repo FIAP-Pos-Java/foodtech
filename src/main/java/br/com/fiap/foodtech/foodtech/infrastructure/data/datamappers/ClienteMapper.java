@@ -12,7 +12,7 @@ public abstract class ClienteMapper {
                 entity.getEmail(),
                 entity.getTipoUsuario(),
                 LoginMapper.toDTO(entity.getLogin()),
-                EnderecoMapper.toDTO(entity.getEndereco())
+                EnderecoMapper.toDataDTO(entity.getEndereco())
         );
     }
 

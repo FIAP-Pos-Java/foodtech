@@ -27,9 +27,9 @@ public interface DataSource {
     void deletarItemCardapio(Long id);
 
     RestauranteDataDTO obterRestaurantePorId(Long id);
-    List<RestauranteDataDTO> obterTodosRestaurantes(int page, int size);
-    RestauranteDataDTO incluirRestaurante(NovoRestauranteDTO novoRestaurante);
-    RestauranteDataDTO atualizarRestaurante(Long id, NovoRestauranteDTO restauranteAtualizado);
+    Pagina<RestauranteDataDTO> obterTodosRestaurantes(Paginacao paginacao);
+    RestauranteDataDTO incluirRestaurante(NovoRestauranteComGestorDTO novoRestaurante);
+    RestauranteDataDTO atualizarRestaurante(RestauranteDataDTO restauranteAtualizado);
     void deletarRestaurante(Long id);
 
     LoginDataDTO obterLoginPorLogin(String login);

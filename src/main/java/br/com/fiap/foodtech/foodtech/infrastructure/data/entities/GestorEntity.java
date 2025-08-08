@@ -22,4 +22,8 @@ public class GestorEntity extends UsuarioEntity {
     public GestorEntity(String nome, String email, String tipoUsuario, LoginEntity login, EnderecoEntity endereco) {
         super(nome, email, tipoUsuario, login, endereco);
     }
+
+    public GestorEntity(Long id, String nome, String email, String tipoUsuario, LoginEntity login, EnderecoEntity endereco) {
+        super(id, nome, email, tipoUsuario, login, endereco);
+    }
 }

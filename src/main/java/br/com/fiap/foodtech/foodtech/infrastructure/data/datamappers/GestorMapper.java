@@ -12,7 +12,7 @@ public abstract class GestorMapper {
                 entity.getEmail(),
                 entity.getTipoUsuario(),
                 LoginMapper.toDTO(entity.getLogin()),
-                EnderecoMapper.toDTO(entity.getEndereco())
+                EnderecoMapper.toDataDTO(entity.getEndereco())
         );
     }
 
@@ -42,6 +42,7 @@ public abstract class GestorMapper {
 
     public static GestorEntity toEntity(GestorDataDTO dto) {
         return new GestorEntity(
+                dto.id(),
                 dto.nome(),
                 dto.email(),
                 dto.tipoUsuario(),
