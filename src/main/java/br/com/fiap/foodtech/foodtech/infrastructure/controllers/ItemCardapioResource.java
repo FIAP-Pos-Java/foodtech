@@ -1,20 +1,28 @@
 package br.com.fiap.foodtech.foodtech.infrastructure.controllers;
 
+import br.com.fiap.foodtech.foodtech.core.controllers.ItemCardapioController;
+import br.com.fiap.foodtech.foodtech.core.dtos.*;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.ItemCardapioEntity;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.repositories.DataRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/itens-do-cardapio")
 @Tag(name = "Cardapio", description = "Controller responsável pelo gerenciamento dos itens do cardápio")
 public class ItemCardapioResource {
 
-    private static final Logger logger = LoggerFactory.getLogger(ItemCardapioResource.class);
+    @Autowired
+    DataRepository dataRepository;
 
-
-    /*@Operation(
+    @Operation(
             description = "Buscar todos os itens paginados",
             summary = "Buscar itens do cardápio",
             responses = {
@@ -22,13 +30,13 @@ public class ItemCardapioResource {
             }
     )
     @GetMapping
-    public ResponseEntity<List<ItemCardapioEntity>> findAlitensCardapio(
+    public ResponseEntity<Pagina<ItemCardapioDTO>> findAlitensCardapio(
             @RequestParam("page") int page,
             @RequestParam("size") int size
     ) {
-        logger.info("GET /itensCardapio");
-        var itensCardapio = this.itemCardapioService.findAllItensCardapio(page, size);
-        return new ResponseEntity<>(itensCardapio.getContent(), HttpStatus.OK);
+        ItemCardapioController itemCardapioController = ItemCardapioController.create(dataRepository);
+        Paginacao paginacao = new Paginacao(page, size);
+        return new ResponseEntity<>(itemCardapioController.buscarTodosItensCardapio(paginacao), HttpStatus.OK);
     }
 
     @Operation(
@@ -39,10 +47,10 @@ public class ItemCardapioResource {
                     @ApiResponse(description = "Not Found", responseCode = "404")
             }
     )
-    @GetMapping("/{id}")
-    public ItemCardapioEntity findItemCardapio(@PathVariable("id") Long id) {
-        logger.info("GET /itensCardapio/" + id);
-        return this.itemCardapioService.findItemCardapio(id);
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ItemCardapioDTO> findItemCardapio(@PathVariable("id") Long id) {
+        ItemCardapioController itemCardapioController = ItemCardapioController.create(dataRepository);
+        return new ResponseEntity<>(itemCardapioController.buscarPorId(id), HttpStatus.OK);
     }
 
     @Operation(
@@ -53,9 +61,9 @@ public class ItemCardapioResource {
             }
     )
     @PostMapping
-    public ResponseEntity<Void> saveItemCardapio(@Valid @RequestBody ItemCardapioDTO itemCardapioDTO) {
-        logger.info("POST /itensCardapio");
-        this.itemCardapioService.saveItemCardapio(itemCardapioDTO);
+    public ResponseEntity<Void> saveItemCardapio(@Valid @RequestBody NovoItemCardapioDTO novoItemCardapioDTO) {
+        ItemCardapioController itemCardapioController = ItemCardapioController.create(dataRepository);
+        itemCardapioController.cadastrar(novoItemCardapioDTO);
         return ResponseEntity.status(201).build();
     }
 
@@ -68,9 +76,9 @@ public class ItemCardapioResource {
             }
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateItemCardapio(@PathVariable("id") Long id, @Valid @RequestBody ItemCardapioDTO itemCardapioDTO) {
-        logger.info("PUT /itensCardapio/" + id);
-        this.itemCardapioService.updateItemCardapio(id, itemCardapioDTO);
+    public ResponseEntity<Void> updateItemCardapio(@PathVariable("id") Long id, @Valid @RequestBody ItemCardapioDataDTO itemCardapioDataDTO) {
+        ItemCardapioController itemCardapioController = ItemCardapioController.create(dataRepository);
+        itemCardapioController.atualizar(id, itemCardapioDataDTO);
         return ResponseEntity.ok().build();
     }
 
@@ -84,9 +92,9 @@ public class ItemCardapioResource {
     )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItemCardapio(@PathVariable("id") Long id) {
-        logger.info("DELETE /itensCardapio/" + id);
-        this.itemCardapioService.deleteItemCardapio(id);
+        ItemCardapioController itemCardapioController = ItemCardapioController.create(dataRepository);
+        itemCardapioController.deletar(id);
         return ResponseEntity.noContent().build();
-    }*/
+    }
 
 }

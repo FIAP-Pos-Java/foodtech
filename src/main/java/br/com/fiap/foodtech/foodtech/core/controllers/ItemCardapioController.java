@@ -1,13 +1,11 @@
 package br.com.fiap.foodtech.foodtech.core.controllers;
 
-import br.com.fiap.foodtech.foodtech.core.domain.usecases.BuscarItemCardapioPorIdUseCase;
-import br.com.fiap.foodtech.foodtech.core.domain.usecases.CadastrarItemCardapioUseCase;
-import br.com.fiap.foodtech.foodtech.core.domain.usecases.ListarItensCardapioUseCase;
-import br.com.fiap.foodtech.foodtech.core.dtos.ItemCardapioDTO;
-import br.com.fiap.foodtech.foodtech.core.dtos.NovoItemCardapioDTO;
+import br.com.fiap.foodtech.foodtech.core.domain.usecases.*;
+import br.com.fiap.foodtech.foodtech.core.dtos.*;
 import br.com.fiap.foodtech.foodtech.core.exceptions.itemcardapio.ItemCardapioNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.gateways.ItemCardapioGateway;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
+import br.com.fiap.foodtech.foodtech.core.presenters.ClientePresenter;
 import br.com.fiap.foodtech.foodtech.core.presenters.ItemCardapioPresenter;
 
 import java.util.List;
@@ -25,6 +23,22 @@ public class ItemCardapioController {
         return new ItemCardapioController(dataSource);
     }
 
+    public Pagina<ItemCardapioDTO> buscarTodosItensCardapio(Paginacao paginacao) {
+        var itemCardapioGateway = ItemCardapioGateway.create(this.dataSource);
+        var useCase = ListarItensCardapioUseCase.create(itemCardapioGateway);
+
+        var itensCardapio = useCase.run(paginacao);
+        return new Pagina<>(itensCardapio.content().stream().map(ItemCardapioPresenter::toDTO).toList(), itensCardapio.totalElements());
+    }
+
+    public ItemCardapioDTO buscarPorId(Long id) {
+        var itemCardapioGateway = ItemCardapioGateway.create(this.dataSource);
+        var useCase = BuscarItemCardapioPorIdUseCase.create(itemCardapioGateway);
+
+        var item = useCase.run(id);
+        return ItemCardapioPresenter.toDTO(item);
+    }
+
     public ItemCardapioDTO cadastrar(NovoItemCardapioDTO novoItemCardapioDTO) {
         var itemCardapioGateway = ItemCardapioGateway.create(this.dataSource);
         var useCase = CadastrarItemCardapioUseCase.create(itemCardapioGateway);
@@ -33,27 +47,19 @@ public class ItemCardapioController {
         return ItemCardapioPresenter.toDTO(item);
     }
 
-    public ItemCardapioDTO buscarPorId(Long id) {
+    public ItemCardapioDTO atualizar(Long id, ItemCardapioDataDTO itemCardapioDataDTO) {
         var itemCardapioGateway = ItemCardapioGateway.create(this.dataSource);
-        var useCase = BuscarItemCardapioPorIdUseCase.create(itemCardapioGateway);
+        var useCase = AtualizarItemCardapioUseCase.create(itemCardapioGateway);
 
-        try {
-            var item = useCase.run(id);
-            return ItemCardapioPresenter.toDTO(item);
-        } catch (ItemCardapioNaoEncontradoException e) {
-            throw e;
-        }
+        var item = useCase.run(id, itemCardapioDataDTO);
+        return ItemCardapioPresenter.toDTO(item);
     }
 
-    public List<ItemCardapioDTO> listarTodos(int page, int size) {
+    public void deletar(Long id) {
         var itemCardapioGateway = ItemCardapioGateway.create(this.dataSource);
-        var useCase = ListarItensCardapioUseCase.create(itemCardapioGateway);
+        var useCase = DeletarItemCardapioUseCase.create(itemCardapioGateway);
 
-        var itens = useCase.run(page, size);
-
-        return itens.stream()
-                .map(ItemCardapioPresenter::toDTO)
-                .collect(Collectors.toList());
+        useCase.run(id);
     }
 
 }

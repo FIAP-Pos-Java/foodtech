@@ -2,14 +2,8 @@ package br.com.fiap.foodtech.foodtech.infrastructure.data.repositories;
 
 import br.com.fiap.foodtech.foodtech.core.dtos.*;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.ClienteMapper;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.GestorMapper;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.LoginMapper;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.RestauranteMapper;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.ClienteEntity;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.GestorEntity;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.LoginEntity;
-import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.RestauranteEntity;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.datamappers.*;
+import br.com.fiap.foodtech.foodtech.infrastructure.data.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -123,27 +117,35 @@ public class DataRepository implements DataSource {
 
     @Override
     public ItemCardapioDataDTO obterItemCardapioPorId(Long id) {
-        return null;
+        ItemCardapioEntity itemCardapio = this.itemCardapioRepository.findById(id).orElse(null);
+        if (itemCardapio == null) {
+            return null;
+        }
+        return ItemCardapioMapper.toDTO(itemCardapio);
     }
 
     @Override
-    public List<ItemCardapioDataDTO> obterTodosItensCardapio(int page, int size) {
-        return List.of();
+    public Pagina<ItemCardapioDataDTO> obterTodosItensCardapio(Paginacao paginacao) {
+        Pageable pageable = PageRequest.of(paginacao.page(), paginacao.size());
+        var page = itemCardapioRepository.findAll(pageable);
+        return new Pagina<>(page.getContent().stream().map(ItemCardapioMapper::toDTO).toList(), (int) page.getTotalElements());
     }
 
     @Override
     public ItemCardapioDataDTO incluirItemCardapio(NovoItemCardapioDTO novoItem) {
-        return null;
+        ItemCardapioEntity itemCardapio = this.itemCardapioRepository.save(ItemCardapioMapper.toEntity(novoItem));
+        return ItemCardapioMapper.toDTO(itemCardapio);
     }
 
     @Override
-    public ItemCardapioDataDTO atualizarItemCardapio(Long id, NovoItemCardapioDTO itemAtualizado) {
-        return null;
+    public ItemCardapioDataDTO atualizarItemCardapio(ItemCardapioDataDTO itemCardapioDataDTO) {
+        ItemCardapioEntity itemCardapio = this.itemCardapioRepository.save(ItemCardapioMapper.toEntity(itemCardapioDataDTO));
+        return ItemCardapioMapper.toDTO(itemCardapio);
     }
 
     @Override
     public void deletarItemCardapio(Long id) {
-
+        this.itemCardapioRepository.deleteById(id);
     }
 
     @Override

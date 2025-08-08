@@ -21,9 +21,9 @@ public interface DataSource {
     void deletarGestor(Long id);
 
     ItemCardapioDataDTO obterItemCardapioPorId(Long id);
-    List<ItemCardapioDataDTO> obterTodosItensCardapio(int page, int size);
+    Pagina<ItemCardapioDataDTO> obterTodosItensCardapio(Paginacao paginacao);
     ItemCardapioDataDTO incluirItemCardapio(NovoItemCardapioDTO novoItem);
-    ItemCardapioDataDTO atualizarItemCardapio(Long id, NovoItemCardapioDTO itemAtualizado);
+    ItemCardapioDataDTO atualizarItemCardapio(ItemCardapioDataDTO itemCardapioDataDTO);
     void deletarItemCardapio(Long id);
 
     RestauranteDataDTO obterRestaurantePorId(Long id);

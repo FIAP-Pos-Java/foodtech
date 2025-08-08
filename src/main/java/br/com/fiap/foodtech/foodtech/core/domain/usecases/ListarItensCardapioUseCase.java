@@ -1,6 +1,8 @@
 package br.com.fiap.foodtech.foodtech.core.domain.usecases;
 
 import br.com.fiap.foodtech.foodtech.core.domain.entities.ItemCardapio;
+import br.com.fiap.foodtech.foodtech.core.dtos.Pagina;
+import br.com.fiap.foodtech.foodtech.core.dtos.Paginacao;
 import br.com.fiap.foodtech.foodtech.core.gateways.IItemCardapioGateway;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class ListarItensCardapioUseCase {
         return new ListarItensCardapioUseCase(itemCardapioGateway);
     }
 
-    public List<ItemCardapio> run(int page, int size) {
-        return itemCardapioGateway.buscarTodos(page, size);
+    public Pagina<ItemCardapio> run(Paginacao paginacao) {
+        return itemCardapioGateway.buscarTodos(paginacao);
     }
 
 }

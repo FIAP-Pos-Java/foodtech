@@ -3,6 +3,8 @@ package br.com.fiap.foodtech.foodtech.core.gateways;
 import br.com.fiap.foodtech.foodtech.core.domain.entities.ItemCardapio;
 import br.com.fiap.foodtech.foodtech.core.dtos.ItemCardapioDataDTO;
 import br.com.fiap.foodtech.foodtech.core.dtos.NovoItemCardapioDTO;
+import br.com.fiap.foodtech.foodtech.core.dtos.Pagina;
+import br.com.fiap.foodtech.foodtech.core.dtos.Paginacao;
 import br.com.fiap.foodtech.foodtech.core.exceptions.itemcardapio.ItemCardapioNaoEncontradoException;
 import br.com.fiap.foodtech.foodtech.core.interfaces.DataSource;
 
@@ -25,18 +27,17 @@ public class ItemCardapioGateway implements IItemCardapioGateway {
     public ItemCardapio buscarPorId(Long id) {
         var itemData = dataSource.obterItemCardapioPorId(id);
         if (itemData == null) {
-            throw new ItemCardapioNaoEncontradoException("Item do cardápio com ID " + id + " não encontrado");
+            return null;
         }
 
         return mapToItemCardapio(itemData);
     }
 
     @Override
-    public List<ItemCardapio> buscarTodos(int page, int size) {
-        var itensData = dataSource.obterTodosItensCardapio(page, size);
-        return itensData.stream()
-                .map(this::mapToItemCardapio)
-                .collect(Collectors.toList());
+    public Pagina<ItemCardapio> buscarTodos(Paginacao paginacao) {
+        var itensData = dataSource.obterTodosItensCardapio(paginacao);
+        return new Pagina<>(itensData.content().stream().map(clienteDTO -> mapToItemCardapio(clienteDTO)).toList(),
+                itensData.totalElements());
     }
 
     @Override
@@ -55,7 +56,8 @@ public class ItemCardapioGateway implements IItemCardapioGateway {
 
     @Override
     public ItemCardapio atualizar(ItemCardapio itemCardapio) {
-        NovoItemCardapioDTO itemAtualizadoDTO = new NovoItemCardapioDTO(
+        ItemCardapioDataDTO itemAtualizadoDTO = new ItemCardapioDataDTO(
+                itemCardapio.getId(),
                 itemCardapio.getNome(),
                 itemCardapio.getDescricao(),
                 itemCardapio.getPreco(),
@@ -63,7 +65,7 @@ public class ItemCardapioGateway implements IItemCardapioGateway {
                 itemCardapio.getCaminhoFoto()
         );
 
-        var itemAtualizado = dataSource.atualizarItemCardapio(itemCardapio.getId(), itemAtualizadoDTO);
+        var itemAtualizado = dataSource.atualizarItemCardapio(itemAtualizadoDTO);
         return mapToItemCardapio(itemAtualizado);
     }
 
