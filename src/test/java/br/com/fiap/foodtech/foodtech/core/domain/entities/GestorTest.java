@@ -19,7 +19,7 @@ class GestorTest {
         assertNotNull(gestor);
         assertEquals("Maria Silva", gestor.getNome());
         assertEquals("maria@email.com", gestor.getEmail());
-        assertEquals("DONODERESTAURANTE", gestor.getTipoUsuario());
+        assertEquals("GESTOR", gestor.getTipoUsuario());
         assertEquals(login, gestor.getLogin());
         assertEquals(endereco, gestor.getEndereco());
     }
@@ -31,10 +31,10 @@ class GestorTest {
         Login login = new Login("gestor123", "senha123");
         Endereco endereco = new Endereco("Rua A", "123", "Centro", "São Paulo", "SP", "01234567");
 
-        Gestor gestor = new Gestor(1L, "Maria Silva", "maria@email.com", "DONODERESTAURANTE", endereco, login);
+        Gestor gestor = new Gestor(1L, "Maria Silva", "maria@email.com", "GESTOR", endereco, login);
 
         assertEquals(1L, gestor.getId());
-        assertEquals("DONODERESTAURANTE", gestor.getTipoUsuario());
+        assertEquals("GESTOR", gestor.getTipoUsuario());
     }
 
     @Test
